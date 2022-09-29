@@ -1,5 +1,7 @@
 import * as React from "react";
-import { View,Text } from "react-native";
+import { View,Text} from "react-native";
+import SearchBar from "../../components/SearchBar";
+
 
 
 export default function ItineraryScreen({ navigation }) {
@@ -21,7 +23,10 @@ export default function ItineraryScreen({ navigation }) {
                 
                 Search Bar Placeholder
             </Text>
-            
+            <SearchBar
+                 onPress={() => alert('Search bar component')}>
+                
+            </SearchBar>
         </View>
     );
 }
