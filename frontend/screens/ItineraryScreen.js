@@ -9,7 +9,7 @@ export default function ItineraryScreen({ navigation }) {
                 style={{ fontSize: 26, fontWeight: 'bold' }}>
                     
                 
-                Itinerary Screen
+                Itinerary Screen Testing
             </Text>
         </View>
     );
