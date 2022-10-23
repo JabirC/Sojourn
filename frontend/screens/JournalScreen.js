@@ -4,16 +4,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 let boxWidth = "90%"
 
-
 export default function JournalScreen({ navigation }) {
+    let [switchVal, setSwitchVal] = React.useState(false);
+
     return (
         <View style={{ flex: 1, alignItems: 'center'}}>
-            {/* <Text
-                onPress={() => alert('Placeholder Journal screen.')}
-                style={{ fontSize: 26, fontWeight: 'bold' }}>
-                Journal Screenasdjhv
-            </Text> */}
-            
             {/* Location Entry */}
             <View style = {styles.locationEntryRec}>
                 <Ionicons name={"md-location-outline"} size={23} style = {styles.locationIcon}  />
@@ -29,7 +24,12 @@ export default function JournalScreen({ navigation }) {
                 </Text>
 
                 <View style = {styles.publicPrivateSwitch}>
-                    <Switch trackColor={{false:"grey",true:"black"}} thumbColor = {"black"} value = {false}> 
+                    <Switch 
+                        trackColor={{false:"grey",true:"black"}} 
+                        thumbColor = {"black"} 
+                        value = {switchVal}
+                        onValueChange = {(value) => setSwitchVal(value)}
+                    >
                     </Switch>
                     <Text style = {{paddingTop: "12%"}}>
                         Private
