@@ -38,6 +38,7 @@ export default function JournalScreen({ navigation }) {
             </View>
             {/* Post Button */}
             <View style = {styles.postButton}> 
+                {/* <Button title = "Post" onPress={() => alert("Pressed")} color = "black"> */}
                 <Button title = "Post" onPress={() => alert("Pressed")} color = "black">
                 </Button>
             </View>
