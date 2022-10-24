@@ -1,27 +1,54 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Button, Switch } from "react-native";
+import { View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ModalDropdown from 'react-native-modal-dropdown';
+import axios from "axios";
 
 let boxWidth = "90%"
 
 export default function JournalScreen({ navigation }) {
     let [switchVal, setSwitchVal] = React.useState(false);
-
+    let [locationVal, setLocationVal] = React.useState("");
+    let [descriptionVal, setDescriptionVal] = React.useState("");
+    let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
     return (
         <View style={{ flex: 1, alignItems: 'center'}}>
             {/* Location Entry */}
             <View style = {styles.locationEntryRec}>
                 <Ionicons name={"md-location-outline"} size={23} style = {styles.locationIcon}  />
-                <Text style = {styles.locationEntryText}> 
+                {/* <Text style = {styles.locationEntryText}> 
                     User would be able to enter the location here 
-                </Text>
+                </Text> */}
+                <ModalDropdown
+                    // ref={dropdown}
+                    style={{ width: '100%' }}
+                    defaultValue="Choose a location..."
+                    textStyle={{paddingTop: "1%",paddingLeft:"5%", fontSize: '16'}}
+                    showsVerticalScrollIndicator={false}
+                    options= {dropDownData}
+                    onSelect={(e)=>{
+                        setLocationVal(dropDownData[e]);
+                    }}
+                    dropdownStyle={{
+                        marginTop: 0.5,
+                        width: '90%',
+                        borderRadius: 10,
+                        borderWidth: 0,
+                        elevation: 3,
+                        overflow: 'hidden',
+                    }}
+                    dropdownTextStyle={{paddingLeft:"5%",fontSize:'16'}}
+                >
+                </ModalDropdown>
+
             </View>
             {/* Entry Writing Space */}
             <View style = {styles.journalWriteRec}>                
-                <Text style = {styles.locationEntryText}> 
-                    User would be able to write the review here and will then be able to toggle a public
-                    private switch
-                </Text>
+                <TextInput 
+                   style = {styles.locationEntryText}
+                   onChangeText = {(e)=>{setDescriptionVal(e)}} 
+                >
+                </TextInput>
 
                 <View style = {styles.publicPrivateSwitch}>
                     <Switch 
@@ -31,22 +58,42 @@ export default function JournalScreen({ navigation }) {
                         onValueChange = {(value) => setSwitchVal(value)}
                     >
                     </Switch>
-                    <Text style = {{paddingTop: "12%"}}>
+                    <Text style = {{paddingTop:"10%", paddingLeft: "8%", fontSize:'14'}}>
                         Private
                     </Text>
                 </View>    
             </View>
             {/* Post Button */}
             <View style = {styles.postButton}> 
-                <Button title = "Post" onPress={() => alert("Pressed")} color = "black">
+                <Button 
+                    title = "Post" 
+                    onPress={() =>
+                        axios.post( "https://sojourn-user-auth.herokuapp.com/api/journal" ,
+                            {
+                                username: 'testing123',
+                                locationName: locationVal,
+                                description: descriptionVal,
+                                privateEntry: switchVal
+                            }
+                        )    
+                        .then(
+                            (response) => {
+                                // console.log(response.data); // Json of the newly added json to collection    
+                                alert("Journal Has Been Posted!");
+                            }
+                        ) 
+                        .catch(
+                            (response) => {
+                                alert(response.response.data);
+                            }
+                        )
+                    } 
+                    color = "black"
+                >
                 </Button>
             </View>
             {/* Public/Private Switch with text */}
             <View style = {styles.journalHistoryRec}>
-                <Text style = {styles.locationEntryText}> 
-                    This is a Placeholder box where the most recent reviews the user wrote,
-                    num of which TBD, will be shown here
-                </Text>
             </View>
         </View>
     );
@@ -63,9 +110,12 @@ const styles = StyleSheet.create(
             flexDirection: "row",
         },
         locationEntryText:{
-            flex: 11,
-            fontWeight: "bold",
-            paddingTop: 2,
+            textAlign: "left",
+            width: "100%",
+            height: "75%",
+            paddingBottom: '20%',
+            paddingRight:"2%",
+            fontSize: '14;'
         },
         locationIcon:{
             width: "8%",
@@ -91,6 +141,7 @@ const styles = StyleSheet.create(
         },
         publicPrivateSwitch:{
             paddingLeft:"70%",
+            paddingTop:"1%",
             flexDirection:"row"
         },
         postButton:{
