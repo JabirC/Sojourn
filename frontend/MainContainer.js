@@ -46,7 +46,7 @@ function MainContainer() {
                 tabBarActiveTintColor: 'blue',
                 tabBarInactiveTintColor: 'grey',
                 tabBarLabelStyle: { paddingBottom: 4, fontSize: 12 },
-                tabBarStyle: { paddingBottom: 15, height: 65, paddingTop: 8},
+                tabBarStyle: { paddingBottom: 7, height: "8%", paddingTop: 8},
                 headerShown:false
             })
         }
