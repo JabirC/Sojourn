@@ -15,15 +15,15 @@ function attemptSignUp(newUser, newPass, newEmail, navigation){
             // username : newUser,
             // email: newEmail,
             // password: newPass
-            username: "tes6asda" ,
-	        email: "test6@x.com",
-	        password: "tes"
+            username: newUser ,
+	        email: newEmail,
+	        password: newPass
         }
     )
     .then(
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection    
-            navigation.navigate("MainContainer");
+            navigation.navigate("MainContainer", {username:username});
 
             // navigation.goBack(); // This can make it so that user sent back to sign in after correct signup
         }
