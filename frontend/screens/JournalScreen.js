@@ -68,6 +68,9 @@ export default function JournalScreen({ navigation }) {
                 <TextInput 
                    style = {styles.locationEntryText}
                    onChangeText = {(e)=>{setDescriptionVal(e)}} 
+                   multiline = {true} 
+                   textAlignVertical = {"top"}
+                   numberOfLines = {6}
                 >
                 </TextInput>
 
@@ -79,7 +82,7 @@ export default function JournalScreen({ navigation }) {
                         onValueChange = {(value) => setSwitchVal(value)}
                     >
                     </Switch>
-                    <Text style = {{paddingTop:"10%", paddingLeft: "8%", fontSize: 14}}>
+                    <Text style = {{paddingTop:"13%", fontSize: 14}}>
                         Private
                     </Text>
                 </View>    
@@ -150,8 +153,8 @@ const styles = StyleSheet.create(
         locationEntryText:{
             textAlign: "left",
             width: "100%",
-            height: "75%",
-            paddingBottom: '20%',
+            height: "155%",
+            marginBottom: '-30%',
             paddingRight:"2%",
             fontSize: 14
         },
@@ -167,7 +170,8 @@ const styles = StyleSheet.create(
             borderColor: "black",
             borderWidth: 1,
             paddingLeft: "2.5%",
-            marginBottom: "2.5%"
+            marginBottom: "2.5%",
+            paddingBottom: "3%"
         },
         journalHistoryRec:
         {
