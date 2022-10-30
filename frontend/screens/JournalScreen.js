@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
+import { FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
@@ -10,7 +10,28 @@ export default function JournalScreen({ navigation }) {
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
+    let [journalsList, setJournalsList] = React.useState([]);
     let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
+    React.useEffect(() => {
+        let mounted = true;
+        axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
+            {
+                username: 'testing123',
+            }
+        )    
+        .then(
+            (response) => {  
+                console.log(response.data);
+                setJournalsList(response.data);
+            }
+        ) 
+        .catch(
+            (response) => {
+                alert(response.response.data);
+            }
+        )
+        return () => mounted = false;
+    }, [])
     return (
         <View style={{ flex: 1, alignItems: 'center'}}>
             {/* Location Entry */}
@@ -23,7 +44,7 @@ export default function JournalScreen({ navigation }) {
                     // ref={dropdown}
                     style={{ width: '100%' }}
                     defaultValue="Choose a location..."
-                    textStyle={{paddingTop: "1%",paddingLeft:"5%", fontSize: '16'}}
+                    textStyle={{paddingTop: "1%",paddingLeft:"5%", fontSize: 16}}
                     showsVerticalScrollIndicator={false}
                     options= {dropDownData}
                     onSelect={(e)=>{
@@ -37,7 +58,7 @@ export default function JournalScreen({ navigation }) {
                         elevation: 3,
                         overflow: 'hidden',
                     }}
-                    dropdownTextStyle={{paddingLeft:"5%",fontSize:'16'}}
+                    dropdownTextStyle={{paddingLeft:"5%",fontSize:16}}
                 >
                 </ModalDropdown>
 
@@ -58,7 +79,7 @@ export default function JournalScreen({ navigation }) {
                         onValueChange = {(value) => setSwitchVal(value)}
                     >
                     </Switch>
-                    <Text style = {{paddingTop:"10%", paddingLeft: "8%", fontSize:'14'}}>
+                    <Text style = {{paddingTop:"10%", paddingLeft: "8%", fontSize: 14}}>
                         Private
                     </Text>
                 </View>    
@@ -92,8 +113,25 @@ export default function JournalScreen({ navigation }) {
                 >
                 </Button>
             </View>
-            {/* Public/Private Switch with text */}
             <View style = {styles.journalHistoryRec}>
+                {/* {  
+                  journalsList.map(({locationName, description})=>{
+                    return <Text>locationName</Text>
+                  }
+                  )
+                } */}
+                <Button 
+                    title = "temp" 
+                    onPress={()=>{
+                        console.log(journalsList)
+                     }}
+                >
+                </Button>
+                {/* <FlatList>
+                {journalsList.map(function(obj, index){
+                    return <li key={ index }>{obj['locationName']}</li>;
+                  })}
+                </FlatList> */}
             </View>
         </View>
     );
@@ -115,7 +153,7 @@ const styles = StyleSheet.create(
             height: "75%",
             paddingBottom: '20%',
             paddingRight:"2%",
-            fontSize: '14;'
+            fontSize: 14
         },
         locationIcon:{
             width: "8%",
