@@ -2,6 +2,15 @@ import * as React from "react";
 import { View, Text, StyleSheet, Button, TextInput } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('username', value)
+    } catch (e) {
+      // saving error
+    }
+  }
 
 function attemptSignIn(username, password, navigation){
     // const client = axios.create({
@@ -17,7 +26,8 @@ function attemptSignIn(username, password, navigation){
     )
     .then(
         (response) => {
-            // console.log(response.data); // Json of the newly added json to collection    
+            // console.log(response.data); // Json of the newly added json to collection
+            storeData(username);
             navigation.navigate("MainContainer", {username:username});
         }
     )
