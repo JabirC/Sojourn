@@ -18,6 +18,7 @@ const itineraryName = "Itinerary";
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
+  console.log()
   return (
       <Tab.Navigator
         initialRouteName={mapName}

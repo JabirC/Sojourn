@@ -6,14 +6,16 @@ import axios from "axios";
 
 let boxWidth = "90%"
 
+const ItemSeparator = () => <View style={styles.journalSeparator} />;
+
 export default function JournalScreen({ navigation }) {
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
     let [journalsList, setJournalsList] = React.useState([]);
+    let [newPost, setNewPost] = React.useState(0); 
     let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
     React.useEffect(() => {
-        let mounted = true;
         axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
             {
                 username: 'testing123',
@@ -21,8 +23,8 @@ export default function JournalScreen({ navigation }) {
         )    
         .then(
             (response) => {  
-                console.log(response.data);
-                setJournalsList(response.data);
+                console.log(newPost);
+                setJournalsList(response.data.reverse());
             }
         ) 
         .catch(
@@ -30,10 +32,9 @@ export default function JournalScreen({ navigation }) {
                 alert(response.response.data);
             }
         )
-        return () => mounted = false;
-    }, [])
+    }, [newPost])
     return (
-        <View style={{ flex: 1, alignItems: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', paddingTop: "15%"}}>
             {/* Location Entry */}
             <View style = {styles.locationEntryRec}>
                 <Ionicons name={"md-location-outline"} size={23} style = {styles.locationIcon}  />
@@ -68,6 +69,9 @@ export default function JournalScreen({ navigation }) {
                 <TextInput 
                    style = {styles.locationEntryText}
                    onChangeText = {(e)=>{setDescriptionVal(e)}} 
+                   multiline = {true} 
+                   textAlignVertical = {"top"}
+                   numberOfLines = {6}
                 >
                 </TextInput>
 
@@ -79,7 +83,7 @@ export default function JournalScreen({ navigation }) {
                         onValueChange = {(value) => setSwitchVal(value)}
                     >
                     </Switch>
-                    <Text style = {{paddingTop:"10%", paddingLeft: "8%", fontSize: 14}}>
+                    <Text style = {{paddingTop:"13%", fontSize: 14}}>
                         Private
                     </Text>
                 </View>    
@@ -101,6 +105,7 @@ export default function JournalScreen({ navigation }) {
                             (response) => {
                                 // console.log(response.data); // Json of the newly added json to collection    
                                 alert("Journal Has Been Posted!");
+                                setNewPost(newPost+1);
                             }
                         ) 
                         .catch(
@@ -114,24 +119,26 @@ export default function JournalScreen({ navigation }) {
                 </Button>
             </View>
             <View style = {styles.journalHistoryRec}>
-                {/* {  
-                  journalsList.map(({locationName, description})=>{
-                    return <Text>locationName</Text>
-                  }
-                  )
-                } */}
-                <Button 
+                {/* <Button 
                     title = "temp" 
                     onPress={()=>{
                         console.log(journalsList)
                      }}
                 >
-                </Button>
-                {/* <FlatList>
-                {journalsList.map(function(obj, index){
-                    return <li key={ index }>{obj['locationName']}</li>;
-                  })}
-                </FlatList> */}
+                </Button> */}
+                <View>
+                    <FlatList 
+                        data={journalsList}
+                        renderItem={({ item }) => 
+                            <View>
+                                <Text style= {styles.journalEntryLocation}>{item.locationName}</Text>
+                                <Text style= {styles.journalEntryDescription}>{item.description}</Text>
+                            </View>
+                        }
+                        ItemSeparatorComponent={ItemSeparator}
+                        keyExtractor={(item) => item._id}
+                    />
+                </View>
             </View>
         </View>
     );
@@ -150,8 +157,8 @@ const styles = StyleSheet.create(
         locationEntryText:{
             textAlign: "left",
             width: "100%",
-            height: "75%",
-            paddingBottom: '20%',
+            height: "155%",
+            marginBottom: '-30%',
             paddingRight:"2%",
             fontSize: 14
         },
@@ -167,14 +174,13 @@ const styles = StyleSheet.create(
             borderColor: "black",
             borderWidth: 1,
             paddingLeft: "2.5%",
-            marginBottom: "2.5%"
+            marginBottom: "2.5%",
+            paddingBottom: "3%"
         },
         journalHistoryRec:
         {
             width: boxWidth,
             height: "50%",
-            borderColor: "black",
-            borderWidth: 1,
             marginTop: "10%"
         },
         publicPrivateSwitch:{
@@ -185,6 +191,18 @@ const styles = StyleSheet.create(
         postButton:{
             paddingLeft:"70%",
             width: "90%"
+        },
+        journalSeparator:{
+            paddingBottom:"10%"
+        },
+        journalEntryLocation:{
+            fontSize:17,
+            fontFamily: "Arial",
+            fontWeight: "bold",
+        },
+        journalEntryDescription:{
+            fontFamily: "Arial",
+            fontSize:17
         }
     }
 )
