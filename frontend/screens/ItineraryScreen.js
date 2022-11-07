@@ -1,10 +1,12 @@
 import * as React from "react";
 import { View,Text} from "react-native";
+import { UserNameContext } from "../MainContainer";
 import SearchBar from "../../components/SearchBar";
 
 
 
 export default function ItineraryScreen({ navigation }) {
+    const username = React.useContext(UserNameContext);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 50}}>
             <Text

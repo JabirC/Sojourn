@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
+import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
@@ -9,6 +10,7 @@ let boxWidth = "90%"
 const ItemSeparator = () => <View style={styles.journalSeparator} />;
 
 export default function JournalScreen({ navigation }) {
+    const username = React.useContext(UserNameContext);
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
@@ -92,7 +94,7 @@ export default function JournalScreen({ navigation }) {
             <View style = {styles.postButton}> 
                 <Button 
                     title = "Post" 
-                    onPress={() =>
+                    onPress={() => 
                         axios.post( "https://sojourn-user-auth.herokuapp.com/api/journal" ,
                             {
                                 username: 'testing123',

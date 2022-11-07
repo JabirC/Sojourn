@@ -91,7 +91,8 @@ const styles = StyleSheet.create(
             fontSize: 45, 
             fontWeight: 'bold',
             textAlign:"center",
-            marginBottom:"5%"
+            marginBottom:"5%",
+            width:"90%"
         },
         input: {
             width: "75%",
