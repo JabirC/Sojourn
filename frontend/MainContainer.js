@@ -16,50 +16,51 @@ const journalName = "Journal";
 const itineraryName = "Itinerary";
 
 const Tab = createBottomTabNavigator();
+export const UserNameContext = React.createContext();
 
-function MainContainer() {
-  console.log()
+function MainContainer({route,navigation}) {
   return (
-      <Tab.Navigator
-        initialRouteName={mapName}
-        screenOptions={
-            ({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
-                    let rn = route.name;
+      <UserNameContext.Provider value = {route.params == null ? "TESTING ACC" : route.params["username"]}>
+        <Tab.Navigator
+          initialRouteName={mapName}
+          screenOptions={
+              ({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                      let iconName;
+                      let rn = route.name;
 
-                    if (rn === mapName) {
-                    iconName = focused ? 'md-map' : 'md-map-outline';
+                      if (rn === mapName) {
+                      iconName = focused ? 'md-map' : 'md-map-outline';
 
-                    } else if (rn === profileName) {
-                    iconName = focused ? 'md-person' : 'md-person-outline';
+                      } else if (rn === profileName) {
+                      iconName = focused ? 'md-person' : 'md-person-outline';
 
-                    } else if (rn === journalName) {
-                    iconName = focused ? 'journal' : 'journal-outline';
-                    }
-                    else if (rn === itineraryName) {
-                    iconName = focused ? 'list' : 'list-outline';
-                    }
+                      } else if (rn === journalName) {
+                      iconName = focused ? 'journal' : 'journal-outline';
+                      }
+                      else if (rn === itineraryName) {
+                      iconName = focused ? 'list' : 'list-outline';
+                      }
 
-                    // You can return any component that you like here!
-                    return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: 'blue',
-                tabBarInactiveTintColor: 'grey',
-                tabBarLabelStyle: { paddingBottom: 4, fontSize: 12 },
-                tabBarStyle: { paddingBottom: 7, height: "8%", paddingTop: 8},
-                headerShown:false
-            })
-        }
-        >
+                      // You can return any component that you like here!
+                      return <Ionicons name={iconName} size={size} color={color} />;
+                  },
+                  tabBarActiveTintColor: 'blue',
+                  tabBarInactiveTintColor: 'grey',
+                  tabBarLabelStyle: { paddingBottom: 4, fontSize: 12 },
+                  tabBarStyle: { paddingBottom: 7, height: "8%", paddingTop: 8},
+                  headerShown:false
+              })
+          }
+          >
 
-        <Tab.Screen name={mapName} component={MapScreen} />
-        <Tab.Screen name={journalName} component={JournalScreen} />
-        <Tab.Screen name={itineraryName} component={ItineraryScreen} />
-        <Tab.Screen name={profileName} component={ProfileScreen} />
+          <Tab.Screen name={mapName} component={MapScreen} />
+          <Tab.Screen name={journalName} component={JournalScreen} />
+          <Tab.Screen name={itineraryName} component={ItineraryScreen} />
+          <Tab.Screen name={profileName} component={ProfileScreen} />
 
-      </Tab.Navigator>
+        </Tab.Navigator>
+      </UserNameContext.Provider>
   );
 }
-
 export default MainContainer;

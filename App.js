@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import MainContainer from "./frontend/MainContainer.js";
 import SignInScreen from './frontend/screens/SignInScreen.js';
 import SignUpScreen from './frontend/screens/SignUpScreen.js';
+import SettingsScreen from './frontend/screens/SettingsScreen.js';
+import ResetPassword from './frontend/screens/ResetPassword.js';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -17,6 +19,10 @@ function MyStack(){
       <Stack.Screen name = "SignUpScreen" component={SignUpScreen}/>
 
       <Stack.Screen name = "MainContainer" component={MainContainer}/>
+
+      <Stack.Screen name = "SettingsScreen" component={SettingsScreen}/>
+
+      <Stack.Screen name = "ResetPasswordScreen" component={ResetPassword}/>
         
     </Stack.Navigator>
   )
