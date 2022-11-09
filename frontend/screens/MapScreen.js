@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import MapView from "react-native-maps";
+import { UserNameContext } from "../MainContainer";
 import { Marker } from "react-native-maps";
 import { Polyline } from "react-native-maps";
 
@@ -12,6 +13,7 @@ const nycRegion = {
   };
 
 export default function MapScreen({ navigation }) {
+  const username = React.useContext(UserNameContext);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text
