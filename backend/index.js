@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const journal = require('./routes/writeJournals');
-const readJournals= require('./routes/readJournals')
+const readJournals= require('./routes/readJournals');
+const changePassword = require('./routes/changePassword');
 const express = require('express');
 const app = express();
 
@@ -17,6 +18,7 @@ app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/journal', journal);
 app.use('/api/readJournals', readJournals);
+app.use('/api/changePassword', changePassword);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
