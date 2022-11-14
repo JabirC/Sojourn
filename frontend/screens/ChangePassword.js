@@ -22,7 +22,7 @@ function attemptChangePassword(username, oldPassword, newPassword, confirmNewPas
     .then(
         (response) => {
             console.log(response.data); // Json of the newly added json to collection    
-            navigation.navigate("MainContainer", {username:username});
+            navigation.navigate("SignInScreen", {username:username});
         }
     )
     .catch(
@@ -50,11 +50,11 @@ export default function ChangePassword({ route, navigation }) {
                 Change Password
             </Text>
 
-            <TextInput style = {styles.input} placeholder = "Enter current password" onChangeText={(text) => setInputOldPassword(text)}/>
+            <TextInput style = {styles.input} placeholder = "Enter current password" onChangeText={(text) => setInputOldPassword(text)} secureTextEntry = {true}/>
 
-            <TextInput style = {styles.input} placeholder = "Enter new password" onChangeText={(text) => setInputNewPassword(text)}/>
+            <TextInput style = {styles.input} placeholder = "Enter new password" onChangeText={(text) => setInputNewPassword(text)} secureTextEntry = {true}/>
 
-            <TextInput style = {styles.input} placeholder = "Confirm new password" onChangeText={(text) => setInputConfirmNewPassword(text)}/>
+            <TextInput style = {styles.input} placeholder = "Confirm new password" onChangeText={(text) => setInputConfirmNewPassword(text)} secureTextEntry = {true}/>
 
             <View style = {styles.resetPass}>    
                 <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => attemptChangePassword(route.params.username,inputOldPassword,inputNewPassword,inputConfirmNewPassword,navigation)}>

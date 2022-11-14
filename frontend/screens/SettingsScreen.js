@@ -17,9 +17,17 @@ export default function SettingsScreen({ route, navigation }) {
                 Settings
             </Text>
 
-            <Text style = {styles.resetPass} onPress = {() => navigation.navigate("ChangePasswordScreen", {username:route.params.username})}>
-                Change Password? 
-            </Text>        
+            <TouchableOpacity style={styles.touchableOuterLayer} onPress = {() => navigation.navigate("ChangePasswordScreen", {username:route.params.username})}>
+                <Text style = {styles.touchableTextLayer}>
+                    CHANGE PASSWORD
+                </Text>    
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.touchableSignOutOuterLayer} onPress = {() => navigation.navigate("SignInScreen", {username:""})}>
+                <Text style = {styles.touchableSignOutTextLayer}>
+                    SIGN OUT
+                </Text>    
+            </TouchableOpacity>
         </View>
     );
 }
@@ -36,5 +44,35 @@ const styles = StyleSheet.create({
         marginTop: "5%",
         fontSize: 20,
         fontWeight: "bold"
+    },
+    touchableOuterLayer:{
+        marginTop:"7.5%",
+        backgroundColor:"black",   
+        width:windowWidth*.5,
+        alignSelf:"center"     
+    },
+    touchableTextLayer:{
+        fontWeight:"bold",
+        color:"white",
+        textAlign:"center",
+        fontSize:18,
+        paddingTop:windowWidth*.02,
+        paddingBottom:windowWidth*.02,
+    },
+    touchableSignOutOuterLayer:{
+        marginLeft:"7.5%",
+        marginTop:windowWidth*1.73,
+        width:windowWidth*1.1,
+        position:"absolute",
+        borderTopWidth:1,
+        borderTopColor:"grey"
+    },
+    touchableSignOutTextLayer:{
+        fontWeight:"bold",
+        color:"red",
+        textAlign:"center",
+        fontSize:18,
+        paddingTop:windowWidth*.02,
+        paddingBottom:windowWidth*.02,  
     },
 });
