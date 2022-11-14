@@ -1,12 +1,16 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Button, TextInput } from "react-native";
+import { View, Text, StyleSheet, Button, TextInput, TouchableOpacity, Dimensions } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 function attemptSignIn(username, password, navigation){
     // const client = axios.create({
     //     baseURL: "https://sojourn-user-auth.herokuapp.com/api/users"
     // });
+    console.log("RE")
     axios.post( "https://sojourn-user-auth.herokuapp.com/api/auth" ,
         {
             // username: "tester" ,
@@ -18,6 +22,7 @@ function attemptSignIn(username, password, navigation){
     .then(
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection    
+            console.log("RE2")
             navigation.navigate("MainContainer", {username:username});
         }
     )
@@ -33,6 +38,7 @@ function attemptSignIn(username, password, navigation){
             alert(response.response.data);
         }
     );
+    console.log("RE3");
 }
 
 
@@ -53,14 +59,29 @@ export default function SignInScreen({ navigation }) {
             <TextInput style = {styles.input} placeholder = "Enter password" onChangeText={(text) => setInputPassword(text)} secureTextEntry = {true}/>
 
             {/* Sign In Button */}
-            <View style = {styles.signIn}>
+            {/* <View style = {styles.signIn}>
                 <Button title = "Sign In" onPress={() => attemptSignIn(inputUsername, inputPassword, navigation)} color = "black"> </Button>
-            </View>
+            </View> */}
+
+            {/* Sign In Button */}
+            <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => attemptSignIn(inputUsername, inputPassword, navigation)}>
+                <Text style = {styles.touchableTextLayer}>
+                    SIGN IN
+                </Text>    
+            </TouchableOpacity>
+
 
             {/* Sign Up Button */}
-            <View style = {styles.signUp}>
+            {/* <View style = {styles.signUp}>
                 <Button title = "Sign Up" onPress={() => navigation.navigate("SignUpScreen")} color = "black"> </Button>
-            </View>
+            </View> */}
+
+            {/* Sign Up Button */}
+            <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => navigation.navigate("SignUpScreen")}>
+                <Text style = {styles.touchableTextLayer}>
+                    SIGN UP
+                </Text>    
+            </TouchableOpacity>
             
             {/* Forgot Username or Password */}
             <Text style = {styles.resetUserPass} onPress = {() => alert("Debugging state vars\n" + inputUsername + "\n" + inputPassword)}>
@@ -108,5 +129,20 @@ const styles = StyleSheet.create(
             fontSize: 20,
             fontWeight: "bold"
         },
+        touchableOuterLayer:{
+            marginTop:"7.5%",
+            backgroundColor:"black",   
+            width:windowWidth*.35,
+            alignSelf:"center"     
+        },
+        touchableTextLayer:{
+            fontWeight:"bold",
+            color:"white",
+            textAlign:"center",
+            fontSize:14,
+            paddingTop:"7.5%",
+            paddingBottom:"7.5%",
+        }
+            
     }
 )
