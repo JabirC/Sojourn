@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
-import SearchBar from "../../components/SearchBar.js";
+import ItinSearchBar from "../../components/ItinSearchBar.js";
 import { UserNameContext } from "../MainContainer";
 
 export default function ItineraryScreen({ navigation }) {
@@ -26,7 +26,7 @@ export default function ItineraryScreen({ navigation }) {
         you're starting at.
       </Text>
 
-      <SearchBar placeholder="Hehe"></SearchBar>
+      <ItinSearchBar placeHolderVal="Hehe"></ItinSearchBar>
       <Text
         onPress={() => console.log("pressed journey text")}
         style={{ fontSize: 26, fontWeight: "bold", paddingTop: 70 }}
