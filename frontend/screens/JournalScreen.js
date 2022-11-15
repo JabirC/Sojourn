@@ -1,11 +1,12 @@
 import * as React from "react";
-import { FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
+import {ScrollView, FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
 import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
 import { format } from "date-fns";
-
+import Accordion from "../../components/Accordion";
+import ListAccordion from "../../components/listAccordion";
 
 const ItemSeparator = () => <View style={styles.journalSeparator} />;
 
@@ -44,32 +45,13 @@ export default function JournalScreen({ navigation }) {
 
     return (
         // style={{ flex: 1, alignItems: 'center', paddingTop: "15%"}}
-        <View style={{paddingTop: "10%", flex:1, alignSelf: "stretch", backgroundColor:"#395244"}}>
-            <View style={{flex:1, borderBottomWidth:1, borderColor:"#213028"}}>
+        <View style={{paddingTop: "10%", height:"100%", backgroundColor:"white"}}>
+            <View style={{height:"15%"}}>
 
             </View>
-            <View style = {styles.journalHistoryRec}>
-                <View>
-                    <FlatList 
-                        data={journalsList}
-                        renderItem={({ item, index }) => 
-                                <View style={styles.entryContainer}>
-                                    <View style= {{flex: 1, paddingTop: "2%",height: "100%", justifyContent: "center", alignItems:"center", flexDirection: "column", backgroundColor: dateColors[index % dateColors.length]}}>
-                                        <Text style= {styles.journalEntryDate}>{format(new Date(item.date), "LLL")}</Text>
-                                        <Text style= {styles.journalEntryDate}>{format(new Date(item.date), "do")},</Text>
-                                        <Text style= {styles.journalEntryDate}>{format(new Date(item.date), "yyyy")}</Text>
-                                    </View>
-                                    <View style={{ flex: 4, flexDirection: "column", justifyContent: "center", alignContent:"center", paddingLeft:"3%", backgroundColor: entryColors[index % entryColors.length]}}>
-                                        <Text style= {styles.journalEntryLocation}>{item.locationName}</Text>
-                                        <Text style= {styles.journalEntryDescription}>{item.description}</Text>
-                                    </View>
-                                </View>
-                        }
-                        ItemSeparatorComponent={ItemSeparator}
-                        keyExtractor={(item) => item._id}
-                    />
-                </View>
-            </View>
+            <ScrollView style = {styles.journalHistoryRec}>
+                <ListAccordion data={journalsList}></ListAccordion>
+            </ScrollView>
         </View>
     );
 }
@@ -79,32 +61,7 @@ const styles = StyleSheet.create(
         journalHistoryRec:
         {
             width: "100%",
-            flex: 9,       
-        },
-        entryContainer:{
-            flexDirection: "row", 
-            width: "100%",
-            height: 100
-        },
-        journalSeparator:{
-        },
-        journalEntryDate:{
-            flex:1,
-            fontSize:17,
-            textAlign: 'center',
-            color: "#f0faf5",
-            fontWeight:"bold"
-        },
-        journalEntryLocation:{
-            fontSize:20,
-            fontFamily: "Arial",
-            fontWeight: "bold",
-            color: "#f0faf5"
-        },
-        journalEntryDescription:{
-            fontFamily: "Arial",
-            fontSize:17,
-            color: "#f0faf5"
+            height: "85%",
         }
     }
 )
