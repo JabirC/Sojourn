@@ -1,84 +1,42 @@
 import * as React from "react";
-import { FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
+import { TouchableOpacity, View, ScrollView, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
 import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
 
-let boxWidth = "90%"
 
-export default function JournalScreen({ navigation }) {
+export default function PostJournal({ route, navigation }) {
     const username = React.useContext(UserNameContext);
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
-    let [newPost, setNewPost] = React.useState(0); 
     let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
 
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', paddingTop: "15%"}}>
-            {/* Location Entry */}
-            <View style = {styles.locationEntryRec}>
-                <Ionicons name={"md-location-outline"} size={23} style = {styles.locationIcon}  />
-                {/* <Text style = {styles.locationEntryText}> 
-                    User would be able to enter the location here 
-                </Text> */}
-                <ModalDropdown
-                    // ref={dropdown}
-                    style={{ width: '100%' }}
-                    defaultValue="Choose a location..."
-                    textStyle={{paddingTop: "1%",paddingLeft:"5%", fontSize: 16}}
-                    showsVerticalScrollIndicator={false}
-                    options= {dropDownData}
-                    onSelect={(e)=>{
-                        setLocationVal(dropDownData[e]);
-                    }}
-                    dropdownStyle={{
-                        marginTop: 0.5,
-                        width: '90%',
-                        borderRadius: 10,
-                        borderWidth: 0,
-                        elevation: 3,
-                        overflow: 'hidden',
-                    }}
-                    dropdownTextStyle={{paddingLeft:"5%",fontSize:16}}
+        <View style={{ height: "100%", width:"100%"}}>
+            <View style={styles.header}>
+                <TouchableOpacity
+                    style={{ height:30, width:30, marginTop:"15%", marginLeft:"2%"}}
+                    activeOpacity={0.3}
+                    onPress={() => navigation.goBack()}
                 >
-                </ModalDropdown>
-
-            </View>
-            {/* Entry Writing Space */}
-            <View style = {styles.journalWriteRec}>                
-                <TextInput 
-                   style = {styles.locationEntryText}
-                   onChangeText = {(e)=>{setDescriptionVal(e)}} 
-                   multiline = {true} 
-                   textAlignVertical = {"top"}
-                   numberOfLines = {6}
+                    <Ionicons color={"#303036"} size={30} name="chevron-back" />
+                </TouchableOpacity>
+                <Text style={{fontWeight:"bold", fontSize:17, marginTop:"16.5%", marginLeft:"30%"}}
                 >
-                </TextInput>
+                    New Entry
+                </Text>
 
-                <View style = {styles.publicPrivateSwitch}>
-                    <Switch 
-                        trackColor={{false:"grey",true:"black"}} 
-                        thumbColor = {"black"} 
-                        value = {switchVal}
-                        onValueChange = {(value) => setSwitchVal(value)}
-                    >
-                    </Switch>
-                    <Text style = {{paddingTop:"13%", fontSize: 14}}>
-                        Private
-                    </Text>
-                </View>    
-            </View>
-            {/* Post Button */}
-            <View style = {styles.postButton}> 
-                <Button 
-                    title = "Post" 
+
+                <TouchableOpacity
+                    style={{ height:"20%" , marginTop:"16.5%", marginLeft:"26%"}}
+                    activeOpacity={0.3}
                     onPress={() => 
                         axios.post( "https://sojourn-user-auth.herokuapp.com/api/journal" ,
                             {
-                                username: 'testing123',
+                                username: route.params.username,
                                 locationName: locationVal,
                                 description: descriptionVal,
                                 privateEntry: switchVal
@@ -88,7 +46,7 @@ export default function JournalScreen({ navigation }) {
                             (response) => {
                                 // console.log(response.data); // Json of the newly added json to collection    
                                 alert("Journal Has Been Posted!");
-                                setNewPost(newPost+1);
+                                navigation.goBack();
                             }
                         ) 
                         .catch(
@@ -97,73 +55,89 @@ export default function JournalScreen({ navigation }) {
                             }
                         )
                     } 
-                    color = "black"
                 >
-                </Button>
+                    <Text style={{color:"#0285D6" , fontWeight:"bold", fontSize:17}}>
+                    Post
+                    </Text>
+                </TouchableOpacity>
+
             </View>
+
+            <View style = {styles.locationEntryRec}>
+                
+                <Ionicons name={"md-location-outline"} size={30} style = {{position:"absolute", marginLeft:"2%",color:"#303036"}}  />
+
+                <ModalDropdown
+                    // ref={dropdown}
+                    style={{ width: '100%' }}
+                    defaultValue="Choose a location..."
+                    textStyle={{paddingLeft:"15%", fontSize: 16}}
+                    showsVerticalScrollIndicator={false}
+                    options= {dropDownData}
+                    
+                    onSelect={(e)=>{
+                        setLocationVal(dropDownData[e]);
+                    }}
+                    dropdownStyle={{
+                        marginTop: "4%",
+                        width: '100%',
+                        borderRadius: 10,
+                        borderWidth: 0,
+                        elevation: 3,
+                        overflow: 'hidden'
+                    }}
+                    dropdownTextStyle={{ paddingLeft:"5%",fontSize:16}}
+                >
+                </ModalDropdown>
+
+            </View>
+
+            {/* Entry Writing Space */}
+            <View style = {{paddingLeft:"4%", width:"100%", height:"20%", borderBottomWidth:1, borderBottomColor:"#DFDFE2"}}>                
+                <TextInput 
+                   style = {{width:"100%", height:"100%"}}
+                   onChangeText = {(e)=>{setDescriptionVal(e)}} 
+                   placeholder="Write your entry here..."
+                   multiline = {true} 
+                   textAlignVertical = {"top"}
+                   numberOfLines = {8}
+                   fontSize={16}
+                >
+                </TextInput>   
+            </View>
+
+            <View style = {{borderBottomWidth:1, borderBottomColor:"#DFDFE2", flexDirection:"row",width:"100%", height:"5%"}}>
+                    <Text style={{marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
+                        Make this entry private?
+                    </Text>
+                    <Switch 
+                        style={{marginTop:"1%", marginLeft:"35%"}}
+                        trackColor={{false:"grey",true:"black"}} 
+                        thumbColor = {"black"} 
+                        value = {switchVal}
+                        onValueChange = {(value) => setSwitchVal(value)}
+                    >
+                    </Switch>
+            </View> 
         </View>
     );
 }
 
 const styles = StyleSheet.create(
-    {
-        locationEntryRec: {
-            width: boxWidth,
-            height: "4.5%",
-            borderColor: "black",
-            borderWidth: 1,
-            marginTop: 50,
-            flexDirection: "row",
-        },
-        locationEntryText:{
-            textAlign: "left",
-            width: "100%",
-            height: "155%",
-            marginBottom: '-30%',
-            paddingRight:"2%",
-            fontSize: 14
-        },
-        locationIcon:{
-            width: "8%",
-            flex: 1,
-            paddingTop: 1
-        },
-        journalWriteRec:
-        {
-            width: boxWidth,
-            height: "20%",
-            borderColor: "black",
-            borderWidth: 1,
-            paddingLeft: "2.5%",
-            marginBottom: "2.5%",
-            paddingBottom: "3%"
-        },
-        journalHistoryRec:
-        {
-            width: boxWidth,
-            height: "50%",
-            marginTop: "10%"
-        },
-        publicPrivateSwitch:{
-            paddingLeft:"70%",
-            paddingTop:"1%",
+    {   header: {
+            height:"12.5%",
+            width:"100%",
+            borderBottomWidth:1,
+            borderBottomColor:"#DFDFE2",
             flexDirection:"row"
         },
-        postButton:{
-            paddingLeft:"70%",
-            width: "90%"
+        locationEntryRec: {
+            width:"100%",
+            height: "6%",
+            borderBottomColor: "#DFDFE2",
+            borderBottomWidth: 1,
+            flexDirection: "row",
+            alignItems:"center"
         },
-        journalSeparator:{
-            paddingBottom:"10%"
-        },
-        journalEntryLocation:{
-            fontSize:17,
-            fontFamily: "Arial",
-            fontWeight: "bold",
-        },
-        journalEntryDescription:{
-            fontFamily: "Arial",
-            fontSize:17
-        }
     }
 )

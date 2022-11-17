@@ -1,12 +1,10 @@
 import * as React from "react";
-import {ScrollView, FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
+import {ScrollView, TouchableOpacity, FlatList, View, Text, StyleSheet, Button, Switch, TextInput, Alert } from "react-native";
 import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
-import { format } from "date-fns";
-import Accordion from "../../components/Accordion";
-import ListAccordion from "../../components/listAccordion";
+import ListAccordion from "../../components/ListAccordion";
 
 const ItemSeparator = () => <View style={styles.journalSeparator} />;
 
@@ -15,12 +13,8 @@ let entryColors=["#395144", "#445F50"]
 
 export default function JournalScreen({ navigation }) {
     const username = React.useContext(UserNameContext);
-    let [switchVal, setSwitchVal] = React.useState(false);
-    let [locationVal, setLocationVal] = React.useState("");
-    let [descriptionVal, setDescriptionVal] = React.useState("");
     let [journalsList, setJournalsList] = React.useState([]);
     let [newPost, setNewPost] = React.useState(0); 
-    let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
 
     React.useEffect(() => {
         axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
@@ -39,15 +33,21 @@ export default function JournalScreen({ navigation }) {
                 alert(response.response.data);
             }
         )
-    }, [newPost])
+    }, [])
 
 
 
     return (
-        // style={{ flex: 1, alignItems: 'center', paddingTop: "15%"}}
-        <View style={{paddingTop: "10%", height:"100%", backgroundColor:"white"}}>
-            <View style={{height:"15%"}}>
-
+        <View style={{paddingTop: "1%", height:"100%", backgroundColor:"white"}}>
+            <View style={{width:"100%" ,height:"13%", flexDirection:"row"}}>
+                <Text style={{paddingTop:"15%",paddingLeft:"5%", width:"50%",fontSize:22}}>Journals</Text>
+                <TouchableOpacity
+                    style={{ marginLeft:"36.5%", marginTop:"12%", height:50, width:50 }}
+                    activeOpacity={0.3}
+                    onPress={() => navigation.navigate("PostJournal",{username:username})}
+                >
+                <Ionicons color={"#303036"} size={50} name="add-outline" />
+                </TouchableOpacity>
             </View>
             <ScrollView style = {styles.journalHistoryRec}>
                 <ListAccordion data={journalsList}></ListAccordion>
