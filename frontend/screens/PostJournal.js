@@ -56,7 +56,7 @@ export default function PostJournal({ route, navigation }) {
                         )
                     } 
                 >
-                    <Text style={{color:"#0285D6" , fontWeight:"bold", fontSize:17}}>
+                    <Text style={{color:"#379BD8" , fontWeight:"bold", fontSize:17}}>
                     Post
                     </Text>
                 </TouchableOpacity>
@@ -112,8 +112,8 @@ export default function PostJournal({ route, navigation }) {
                     </Text>
                     <Switch 
                         style={{marginTop:"1%", marginLeft:"35%"}}
-                        trackColor={{false:"grey",true:"black"}} 
-                        thumbColor = {"black"} 
+                        trackColor={{false:"grey",true:"#379BD8"}} 
+                        thumbColor = {"white"} 
                         value = {switchVal}
                         onValueChange = {(value) => setSwitchVal(value)}
                     >
