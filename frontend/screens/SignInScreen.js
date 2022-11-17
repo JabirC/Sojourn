@@ -37,7 +37,6 @@ function attemptSignIn(username, password, navigation){
     .then(
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection
-            storeData(username);
             navigation.navigate("MainContainer", {username:username});
         }
     )

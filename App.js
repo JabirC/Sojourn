@@ -23,7 +23,7 @@ function MyStack(){
 
       <Stack.Screen name = "SettingsScreen" component={SettingsScreen}/>
 
-      <Stack.Screen name = "ResetPasswordScreen" component={ResetPassword}/>
+      <Stack.Screen name = "ChangePasswordScreen" component={ChangePassword}/>
 
       <Stack.Screen name = "PostJournal" component={PostJournal}/>
         
