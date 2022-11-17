@@ -4,7 +4,12 @@ import MainContainer from "./frontend/MainContainer.js";
 import SignInScreen from './frontend/screens/SignInScreen.js';
 import SignUpScreen from './frontend/screens/SignUpScreen.js';
 import SettingsScreen from './frontend/screens/SettingsScreen.js';
+<<<<<<< HEAD
 import ChangePassword from './frontend/screens/ChangePassword.js';
+=======
+import ResetPassword from './frontend/screens/ResetPassword.js';
+import PostJournal from './frontend/screens/PostJournal.js';
+>>>>>>> Journal-Screen
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -23,6 +28,8 @@ function MyStack(){
       <Stack.Screen name = "SettingsScreen" component={SettingsScreen}/>
 
       <Stack.Screen name = "ChangePasswordScreen" component={ChangePassword}/>
+
+      <Stack.Screen name = "PostJournal" component={PostJournal}/>
         
     </Stack.Navigator>
   )
