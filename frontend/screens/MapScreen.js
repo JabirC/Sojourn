@@ -11,14 +11,9 @@ import axios from "axios"
 const url = "https://sojourn-user-auth.herokuapp.com/api/locations";
 
 
-
-
-
-
-
 const nycRegion = {
-    latitude: 40.730610,
-    longitude: -73.935242,
+    latitude: 40.7465,
+    longitude: -74.0014,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -74,6 +69,8 @@ export default function MapScreen({ navigation }) {
                               latitude: loc.LATITUDE,
                               longitude: loc.LONGITUDE
                             }}
+                            onPress={ (event) =>
+                            navigation.navigate("JournalScreen", {locationVal: loc._id})}
                             
                         />
                     )

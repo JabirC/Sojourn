@@ -9,7 +9,8 @@ let boxWidth = "90%"
 
 const ItemSeparator = () => <View style={styles.journalSeparator} />;
 
-export default function JournalScreen({ navigation }) {
+export default function JournalScreen({ navigation, route }) {
+    
     const username = React.useContext(UserNameContext);
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
@@ -17,6 +18,8 @@ export default function JournalScreen({ navigation }) {
     let [journalsList, setJournalsList] = React.useState([]);
     let [newPost, setNewPost] = React.useState(0); 
     let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
+    /*locationVal = route.params; 
+    May need this when passing the parameter */
     React.useEffect(() => {
         axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
             {
