@@ -2,13 +2,13 @@ import * as React from "react";
 import { useState, useEffect, state } from "react";
 import { StyleSheet, Text, View} from "react-native";
 import MapView from "react-native-maps";
-import { UserNameContext } from "../MainContainer";
 import { Marker } from "react-native-maps";
 import { Polyline } from "react-native-maps";
+import { UserNameContext } from "../MainContainer";
 import axios from "axios"
 
 
-const url = "https://sojourn-user-auth.herokuapp.com/api/locations";
+
 
 
 const nycRegion = {
@@ -70,7 +70,7 @@ export default function MapScreen({ navigation }) {
                               longitude: loc.LONGITUDE
                             }}
                             onPress={ (event) =>
-                            navigation.navigate("JournalScreen", {locationVal: loc._id})}
+                            navigation.navigate("PostJournal", {locationVal: loc._id})}
                             
                         />
                     )
