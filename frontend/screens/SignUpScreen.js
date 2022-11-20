@@ -1,7 +1,10 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Button, Switch, TextInput } from "react-native";
+import { View, Text, StyleSheet, Button, TextInput, Dimensions, TouchableOpacity } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 function attemptSignUp(newUser, newPass, newEmail, navigation){
     // const client = axios.create({
@@ -23,7 +26,7 @@ function attemptSignUp(newUser, newPass, newEmail, navigation){
     .then(
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection    
-            navigation.navigate("MainContainer", {username:username});
+            navigation.navigate("MainContainer", {username:newUser});
 
             // navigation.goBack(); // This can make it so that user sent back to sign in after correct signup
         }
@@ -64,14 +67,18 @@ export default function SignUpScreen({ navigation }) {
             <TextInput style = {styles.input} placeholder = "Enter password" onChangeText={(text) => setInputPassword(text)} secureTextEntry = {true}/>
 
             {/* Sign Up Button */}
-            <View style = {styles.signUp}>
+            {/* <View style = {styles.signUp}>
                 <Button title = "Sign Up" 
                 onPress={() => attemptSignUp(inputUsername, inputPassword, inputEmail, navigation)} color = "black" > </Button>
-            </View>
-
-            {/* navigation.navigate("SignInScreen") */}
+            </View> */}
 
             {/* Sign Up Button */}
+            <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => attemptSignUp(inputUsername, inputPassword, inputEmail, navigation)}>
+                <Text style = {styles.touchableTextLayer}>
+                    SIGN UP
+                </Text>    
+            </TouchableOpacity>
+
             <Text style = {styles.resetUserPass}>
                 All fields are required and must be at least 5 characters long
             </Text>
@@ -119,5 +126,19 @@ const styles = StyleSheet.create(
             width: "75%",
             textAlign:"center"
         },
+        touchableOuterLayer:{
+            marginTop:"7.5%",
+            backgroundColor:"black",   
+            width:windowWidth*.35,
+            alignSelf:"center"     
+        },
+        touchableTextLayer:{
+            fontWeight:"bold",
+            color:"white",
+            textAlign:"center",
+            fontSize:14,
+            paddingTop:"7.5%",
+            paddingBottom:"7.5%",
+        }
     }
 )
