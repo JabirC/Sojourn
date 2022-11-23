@@ -14,7 +14,6 @@ let entryColors=["#395144", "#445F50"]
 export default function JournalScreen({ navigation }) {
     const username = React.useContext(UserNameContext);
     let [journalsList, setJournalsList] = React.useState([]);
-
     React.useEffect(() => {
         axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
             {
