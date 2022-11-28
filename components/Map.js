@@ -2,26 +2,70 @@ import * as React from "react";
 import { StyleSheet, Text, View, useEffect} from "react-native";
 import MapView from "react-native-maps";
 import { Marker, PROVIDER_GOOGLE, Callout  } from "react-native-maps";
-import axios from "axios"
+import axios from "axios";
 import  * as GeoLocation from 'expo-location';
-import * as TaskManager from "expo-task-manager"
+import * as TaskManager from "expo-task-manager";
+import {findNearest, getDistance, orderByDistance} from 'geolib';
 
 const LOC_TASK = "LOC_TASK";
+
 
 
 export default class Map extends React.Component{
 
     state = {
       userRegion: null,
+      distance: 6,
+      closestLocation: [],
       locations: [],
-      userlocations: [],
+      currentLocationLat: 0,
+      currentLocationLong: 0,
+      orderedLoc: [],
       hasLocationPermissions: null,
       showsUserLocation: true,
       followsUserLocation : true,
     };
 
+    setOrderedLoc = () => {
+      this.setState({orderedLoc: orderByDistance(
+        {
+         latitude:this.state.currentLocationLat,
+         longitude: this.state.currentLocationLong
+        },
+        
+         this.state.locations)});
+         console.log("orderedLoc: " + JSON.stringify(this.state.orderedLoc))
+         
+    };
+
+    setDistance = () => {
+      this.setState({
+        distance: getDistance(
+          {
+            latitude: this.state.currentLocationLat,
+            longitude: this.state.currentLocationLong
+          },
+          
+            this.state.orderedLoc
+          
+          )});
+
+          
+    };
+
+
+
+    setCurrentLatLong = (coords) => {
+      this.setState({
+        currentLocationLat: coords.latitude,
+        currentLocationLong: coords.longitude
+      })
+      
+    };
 
     async componentDidMount(){
+      
+    
         const { status } = await GeoLocation.requestForegroundPermissionsAsync(); 
         /* The GeoLocation + getLocationAsync are used for realtime location tracking */
         if (status === "granted") {
@@ -74,9 +118,11 @@ export default class Map extends React.Component{
           longitudeDelta: 0.01
         };
         this.setState({ userRegion: userRegion });
+        this.setCurrentLatLong(coords);
+        this.setOrderedLoc();
+        this.setDistance();
       },
-      error => console.log(error)
-    );
+      error => console.log(error));
     return this.userlocation;
   };
 
@@ -98,10 +144,38 @@ export default class Map extends React.Component{
                     showsUserLocation={this.state.followsUserLocation}
                     followsUserLocation={this.state.followsUserLocation}
                     region={this.state.userRegion}
+                    showsMyLocationButton={true}
+                    
                     onUserLocationChange={(event)=> 
                     {
                         console.log(event.nativeEvent);
-                        region:{this.state.userRegion};
+                        this.setOrderedLoc();
+                        this.setDistance();
+                       
+                        if(this.state.distance <= 5)
+                          {
+                          console.log("location is within 5 meters!")
+                          }
+                          /*axios
+                          .post("https://sojourn-user-auth.herokuapp.com/api/addvisitedlocation",
+                            {
+                            username: this.state.username,
+                            locationname: this.state.closestLocation.NAME,
+                            journaled: false,
+                            id: this.state.closestLocation._id,
+                            }
+                          )
+                          .catch((error) => console.error(error)),
+
+                          axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
+                          {
+                            username: this.state.username,
+                            experience: 10,
+                          })
+                          .catch((error) => console.error(error)),
+                          console.log("experience added!"));
+                          
+                        */
                     }}
                 >
 
@@ -113,8 +187,8 @@ export default class Map extends React.Component{
                                     title={loc.NAME}
                                     coordinate=
                                     {{
-                                    latitude: loc.LATITUDE,
-                                    longitude: loc.LONGITUDE
+                                    latitude: loc.latitude,
+                                    longitude: loc.longitude
                                     }}
                                 >
                                     <Callout 
@@ -184,14 +258,15 @@ export default class Map extends React.Component{
 
   });
 
-  TaskManager.defineTask(LOC_TASK, async ({ data, error }) => {
+  TaskManager.defineTask(LOC_TASK, async ({ data, locations, error }) => {
     if (error) {
       console.log(error);
       return;
     }
+
+
     if (data) {
-      /* this is where proximity event will occur */
-   
+      console.log("user location updated!")
     }
 });
   
