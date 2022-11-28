@@ -4,9 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
   SafeAreaView,
   FlatList,
   TextInput,
+  Alert,
 } from "react-native";
 import { Button, ListItem } from "react-native-elements";
 import ItinSearchBar from "../../components/ItinSearchBar.js";
@@ -35,12 +37,16 @@ export default function ItineraryScreen({ navigation }) {
   }, []);
 
   const searchFilter = (text) => {
+    console.log(text);
     if (text) {
       // this search filter needs to be fixed
       const newLocations = masterLocations.filter((item) => {
-        const itemData = item.NAME;
+        // const itemData = item.NAME; this line not needed for us
         const textData = text.toUpperCase();
-        return item.NAME.indexOf(textData) != "";
+        console.log(textData.toLowerCase());
+        // console.log(textData);
+        // console.log(item.NAME.indexOf(textData));
+        return item.NAME.indexOf(textData) > -1;
       });
       setFilteredLocations(newLocations);
       setSearch(text);
@@ -50,10 +56,19 @@ export default function ItineraryScreen({ navigation }) {
     }
   };
 
+  const locSelectHandler = ({ item }) => {
+    // ISSUE console.log("teehee" + item.NAME); item.NAME not being passed up
+    console.log("teehee");
+  };
+
   const ItemView = ({ item }) => {
     return (
-      // COME BACK HERE LATER::: !!!!!!!! theres an issue with the itemStyle thing
-      <TouchableOpacity styles={styles.itemStyle}>
+      <TouchableOpacity
+        styles={styles.itemStyle}
+        onPress={(item) => locSelectHandler(item)}
+        // ISSUE: event handling not working
+        // onPress={() => console.log("teehee" + item.NAME)}
+      >
         <Text>{item.NAME}</Text>
       </TouchableOpacity>
     );
@@ -61,13 +76,13 @@ export default function ItineraryScreen({ navigation }) {
 
   const ItemSeparatorView = () => {
     return (
-      <View style={{ paddingBottom: "1%", backgroundColor: "lightblue" }} />
+      <View style={{ paddingBottom: "1%", backgroundColor: "lightgray" }} />
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* ****TOP THIRD OF SCREEN**** */}
+      {/* ****TOP QUESTIONS**** */}
       <View
         style={{
           flex: 1,
@@ -86,7 +101,7 @@ export default function ItineraryScreen({ navigation }) {
             fontSize: 24,
             fontWeight: "bold",
             paddingTop: "10%",
-            paddingBottom: "5%",
+            // paddingBottom: "5%",
             textAlign: "center",
           }}
         >
@@ -95,13 +110,7 @@ export default function ItineraryScreen({ navigation }) {
       </View>
 
       {/* ****SEARCH BAR**** */}
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          backgroundColor: "pink",
-        }}
-      >
+      <View style={styles.searchBarStyles}>
         {/* <ItinSearchBar placeHolderVal="Enter Location Here"></ItinSearchBar> */}
         <TextInput
           style={styles.textInputStyle}
@@ -109,6 +118,7 @@ export default function ItineraryScreen({ navigation }) {
           placeholder={"Enter Location Here..."}
           onChangeText={(text) => searchFilter(text)}
         />
+
         <FlatList
           data={filteredLocations}
           renderItem={ItemView}
@@ -117,7 +127,19 @@ export default function ItineraryScreen({ navigation }) {
         />
       </View>
 
-      {/* ****BOTTOM THIRD OF SCREEN**** */}
+      {/* ****LOCATION COUNT**** */}
+      <View style={styles.locCount}>
+        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+          Select number of locations:
+        </Text>
+        <TouchableOpacity
+          onPress={() => console.log("Location counter placeholder")}
+        >
+          <Text style={{ fontSize: 40, fontWeight: "bold" }}>#</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* ****BUTTON AREA**** */}
       <View
         style={{
           flex: 1,
@@ -133,7 +155,7 @@ export default function ItineraryScreen({ navigation }) {
           {/* BUTTON 1: COST */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            // onPress={console.log([masterLocations, "hehe"])}
+            onPress={() => console.log("Cost pressed")}
           >
             {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
             <Ionicons name={"cash-outline"} size={100} />
@@ -143,14 +165,17 @@ export default function ItineraryScreen({ navigation }) {
           {/* BUTTON 2: DISTANCE */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={console.log("ahaha")}
+            onPress={() => console.log("Distance pressed")}
           >
             <Ionicons name={"airplane-outline"} size={100} />
             <Text style={styles.textStyle}>Distance</Text>
           </TouchableOpacity>
 
           {/* BUTTON 3: SIMILARITY */}
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => console.log("Similarity pressed")}
+          >
             <Ionicons name={"git-branch-outline"} size={100} />
             <Text style={styles.textStyle}>Similarity</Text>
           </TouchableOpacity>
@@ -184,19 +209,38 @@ const styles = StyleSheet.create({
   textStyle: {
     fontSize: 25,
     fontWeight: "bold",
-    textAlig: "center",
+    textAlign: "center",
   },
   itemStyle: {
-    paddingLeft: 10,
+    paddingLeft: "1%",
     backgroundColor: "purple",
   },
   textInputStyle: {
     height: 40,
-    borderWidth: 1,
-    paddingLeft: 20,
-    margin: 5,
+    borderWidth: "1%",
+    alignSelf: "stretch",
+    paddingHorizontal: "2%",
     borderColor: "yellow",
     backgroundColor: "white",
-    width: 300, //come back to this
+  },
+  flatListStyles: {
+    flex: 1,
+    backgroundColor: "green",
+  },
+  searchBarStyles: {
+    //for the whole view containing textinput and flatlist
+    flex: 1,
+    backgroundColor: "pink",
+    alignSelf: "stretch",
+    paddingHorizontal: "1%",
+  },
+  locCount: {
+    flex: 0.5,
+    backgroundColor: "yellow",
+    alignSelf: "stretch",
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
