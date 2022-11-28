@@ -15,7 +15,7 @@ export default function PostJournal({ route, navigation }) {
 
 
     return (
-        <View style={{ height: "100%", width:"100%"}}>
+        <View style={{ height: "100%", width:"100%", backgroundColor:"white"}}>
             <View style={styles.header}>
                 <TouchableOpacity
                     style={{ height:30, width:30, marginTop:"15%", marginLeft:"2%"}}
