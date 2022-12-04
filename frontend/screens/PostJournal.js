@@ -4,15 +4,37 @@ import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
-
+import { useIsFocused } from "@react-navigation/native";
 
 export default function PostJournal({ route, navigation }) {
+    const isFocused = useIsFocused();
     const username = React.useContext(UserNameContext);
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
+    // let [dropDownData, setDropDownData] = React.useState([]);
     let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
-
+    
+    // React.useEffect(() => {
+    //     if(isFocused){
+    //         axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchVisitedLocations" ,
+    //             {
+    //                 username: username,
+    //             }
+    //         )    
+    //         .then(
+    //             (response) => {  
+    //                 setDropDownData(response.data);
+    //             }
+    //         ) 
+    //         .catch(
+    //             (response) => {
+    //                 alert(username)
+    //                 alert(response.response.data);
+    //             }
+    //         )
+    //     }
+    // }, [isFocused])
 
     return (
         <View style={{ height: "100%", width:"100%", backgroundColor:"white"}}>
