@@ -43,6 +43,7 @@ export default function ItineraryScreen({ navigation }) {
       const newLocations = masterLocations.filter((item) => {
         // const itemData = item.NAME; this line not needed for us
         const textData = text.toUpperCase();
+        //ISSUE: filter for non alphabet symbols $% reject them if they show up
         console.log(textData.toLowerCase());
         // console.log(textData);
         // console.log(item.NAME.indexOf(textData));
@@ -58,18 +59,25 @@ export default function ItineraryScreen({ navigation }) {
 
   const locSelectHandler = ({ item }) => {
     // ISSUE console.log("teehee" + item.NAME); item.NAME not being passed up
-    console.log("teehee");
+    // console.log("an item was pressed");
   };
 
   const ItemView = ({ item }) => {
     return (
       <TouchableOpacity
-        styles={styles.itemStyle}
-        onPress={(item) => locSelectHandler(item)}
+        style={styles.itemStyle}
+        // onPress={(item) => locSelectHandler(item)}
         // ISSUE: event handling not working
-        // onPress={() => console.log("teehee" + item.NAME)}
+        onPress={() => console.log("pressed: " + item.NAME)}
       >
-        <Text>{item.NAME}</Text>
+        <Text
+          style={{
+            fontSize: 16,
+            // fontWeight: "bold",
+          }}
+        >
+          {item.NAME}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -115,7 +123,9 @@ export default function ItineraryScreen({ navigation }) {
         <TextInput
           style={styles.textInputStyle}
           value={search}
+          // ISSUE: make the selected item's name become the placeholder text so the user knows what
           placeholder={"Enter Location Here..."}
+          // placeholder={item.NAME}
           onChangeText={(text) => searchFilter(text)}
         />
 
@@ -132,6 +142,7 @@ export default function ItineraryScreen({ navigation }) {
         <Text style={{ fontSize: 30, fontWeight: "bold" }}>
           Select number of locations:
         </Text>
+        {/* ISSUE: Just do a dropdown menu instead */}
         <TouchableOpacity
           onPress={() => console.log("Location counter placeholder")}
         >
@@ -213,14 +224,14 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     paddingLeft: "1%",
-    backgroundColor: "purple",
+    backgroundColor: "darkgray",
   },
   textInputStyle: {
     height: 40,
     borderWidth: "1%",
     alignSelf: "stretch",
     paddingHorizontal: "2%",
-    borderColor: "yellow",
+    // borderColor: "yellow",
     backgroundColor: "white",
   },
   flatListStyles: {
@@ -230,13 +241,13 @@ const styles = StyleSheet.create({
   searchBarStyles: {
     //for the whole view containing textinput and flatlist
     flex: 1,
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
     alignSelf: "stretch",
     paddingHorizontal: "1%",
   },
   locCount: {
     flex: 0.5,
-    backgroundColor: "yellow",
+    // backgroundColor: "yellow",
     alignSelf: "stretch",
 
     flexDirection: "row",
