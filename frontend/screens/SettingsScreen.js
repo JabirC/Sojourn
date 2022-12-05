@@ -21,7 +21,7 @@ export default function SettingsScreen({ route, navigation }) {
                 <Text style = {styles.touchableTextLayer}>
                     CHANGE PASSWORD
                 </Text>    
-            </TouchableOpacity>
+         </TouchableOpacity>
 
             <TouchableOpacity style={styles.touchableSignOutOuterLayer} onPress = {() => navigation.navigate("SignInScreen", {username:""})}>
                 <Text style = {styles.touchableSignOutTextLayer}>
