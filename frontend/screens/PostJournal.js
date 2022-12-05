@@ -12,29 +12,36 @@ export default function PostJournal({ route, navigation }) {
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
-    // let [dropDownData, setDropDownData] = React.useState([]);
-    let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
+    let [initDropDownData, setInitDropDownData] = React.useState([]);
+    let [dropDownData, setDropDownData] = React.useState([]);
+    // let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
     
-    // React.useEffect(() => {
-    //     if(isFocused){
-    //         axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchVisitedLocations" ,
-    //             {
-    //                 username: username,
-    //             }
-    //         )    
-    //         .then(
-    //             (response) => {  
-    //                 setDropDownData(response.data);
-    //             }
-    //         ) 
-    //         .catch(
-    //             (response) => {
-    //                 alert(username)
-    //                 alert(response.response.data);
-    //             }
-    //         )
-    //     }
-    // }, [isFocused])
+    React.useEffect(() => {
+        if(isFocused){
+            axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchVisitedLocations" ,
+                {
+                    username: route.params.username,
+                }
+            )    
+            .then(
+                (response) => {
+                    let nameList = [];
+                    console.log(response.data);
+                    nameList = response.data.map(({locationName})=>
+                        locationName
+                    );
+                    console.log(nameList);
+                    setDropDownData(nameList);
+
+                }
+            ) 
+            .catch(
+                (response) => {
+                    alert(response.response.data);
+                }
+            )
+        }
+    }, [isFocused])
 
     return (
         <View style={{ height: "100%", width:"100%", backgroundColor:"white"}}>
