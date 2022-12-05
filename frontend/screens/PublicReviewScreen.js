@@ -3,31 +3,35 @@ import { ScrollView, StyleSheet, Text, TextInput, View, Dimensions, TouchableOpa
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
 import ReviewListAccordion from "../../components/ReviewListAccordion";
+import { useIsFocused } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function PublicReviewScreen({ route, navigation }) {
     let [journalsList, setJournalsList] = React.useState([]);
+    const isFocused = useIsFocused();
 
     React.useEffect(() => {
-        axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchLocationPublicJournals" ,
-            {
-                locationName: "ING CAFE",
-            }
-        )    
-        .then(
-            (response) => {  
-                console.log(response.data);
-                setJournalsList(response.data.reverse());
-            }
-        ) 
-        .catch(
-            (response) => {
-                alert(response.response.data);
-            }
-        )
-    }, [])
+        if(isFocused){
+            axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchLocationPublicJournals" ,
+                {
+                    locationName: "ING CAFE",
+                }
+            )    
+            .then(
+                (response) => {  
+                    console.log(response.data);
+                    setJournalsList(response.data.reverse());
+                }
+            ) 
+            .catch(
+                (response) => {
+                    alert(response.response.data);
+                }
+            )
+        }
+    }, [isFocused])
 
 
 
