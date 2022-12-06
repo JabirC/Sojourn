@@ -60,19 +60,17 @@ const styles = StyleSheet.create({
         paddingBottom:windowWidth*.02,
     },
     touchableSignOutOuterLayer:{
-        marginLeft:"7.5%",
-        marginTop:windowWidth*1.73,
-        width:windowWidth*1.1,
-        position:"absolute",
-        borderTopWidth:1,
-        borderTopColor:"grey"
+        marginTop:"7.5%",
+        backgroundColor:"red",   
+        width:windowWidth*.5,
+        alignSelf:"center"     
     },
     touchableSignOutTextLayer:{
         fontWeight:"bold",
-        color:"red",
+        color:"white",
         textAlign:"center",
         fontSize:18,
         paddingTop:windowWidth*.02,
-        paddingBottom:windowWidth*.02,  
+        paddingBottom:windowWidth*.02,
     },
 });
