@@ -43,7 +43,7 @@ export default function ResetUsername({ route, navigation }) {
     return (
         <View style = {{flex: 1, alignItems: 'center', marginTop: "20%"}}>
             <Text style = {styles.header}>
-                Reset Password
+                Reset Username
             </Text>
 
             <TextInput style = {styles.input} placeholder = "Enter email" onChangeText={(text) => setInputEmail(text)}/>
@@ -60,11 +60,11 @@ export default function ResetUsername({ route, navigation }) {
                         RESET USERNAME
                     </Text>    
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => alert("List state var vals\n" + inputEmail + "\n" + inputNewUsername + "\n" + inputConfirmNewUsername + "\n" + inputPassword )}> 
+                {/* <TouchableOpacity style={styles.touchableOuterLayer} onPress={() => alert("List state var vals\n" + inputEmail + "\n" + inputNewUsername + "\n" + inputConfirmNewUsername + "\n" + inputPassword )}> 
                     <Text style = {styles.touchableTextLayer}>
                         DEBUG STATE VARS
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     );
