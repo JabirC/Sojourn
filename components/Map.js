@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View, useEffect} from "react-native";
+import { StyleSheet, Text, View, Platform, PermissionsAndroid} from "react-native";
 import MapView from "react-native-maps";
 import { Marker, PROVIDER_GOOGLE, Callout  } from "react-native-maps";
 import axios from "axios";
@@ -8,7 +8,6 @@ import * as TaskManager from "expo-task-manager";
 import {findNearest, getDistance, orderByDistance} from 'geolib';
 
 const LOC_TASK = "LOC_TASK";
-
 
 
 export default class Map extends React.Component{
@@ -26,6 +25,7 @@ export default class Map extends React.Component{
       followsUserLocation : true,
     };
 
+    /* Sorts locations by proximity to user location */
     setOrderedLoc = () => {
       this.setState({orderedLoc: orderByDistance(
         {
@@ -38,7 +38,9 @@ export default class Map extends React.Component{
          
     };
 
+    /* Determines distance between user location and nearest marker/place of interest */
     setDistance = () => {
+      if(this.state.orderedLoc[0] != null){
       this.setState({
         distance: getDistance(
           {
@@ -46,36 +48,47 @@ export default class Map extends React.Component{
             longitude: this.state.currentLocationLong
           },
           
-            this.state.orderedLoc
+            this.state.orderedLoc[0]
           
-          )});
-
-          
+          )});}   
     };
 
-
-
+    /* Sets current user location latitude + longitude */
     setCurrentLatLong = (coords) => {
       this.setState({
         currentLocationLat: coords.latitude,
         currentLocationLong: coords.longitude
       })
-      
     };
 
+   
+
     async componentDidMount(){
-      
-    
-        const { status } = await GeoLocation.requestForegroundPermissionsAsync(); 
+
         /* The GeoLocation + getLocationAsync are used for realtime location tracking */
-        if (status === "granted") {
+        if (Platform.OS == "ios"){
+          const { status } = await GeoLocation.requestForegroundPermissionsAsync(); 
+          if (status === "granted") {
             this.setState({ hasLocationPermissions: true });
             this._getLocationAsync();
+          }
+        }
+
+        
+        else if (Platform.OS === 'android') {
+          const {status} = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+          if (status === PermissionsAndroid.RESULTS.GRANTED)
+          {
+            this.setState({ hasLocationPermissions: true });
+            this._getLocationAsync();
+          }
         }
 
         else {
             alert("Location permission not granted");
-          }
+          };
 
         /* The below queries the database for location destinations to populate on the map */  
         axios
@@ -92,10 +105,10 @@ export default class Map extends React.Component{
         
     }
 
-  
     
 /*Realtime Location Tracking*/
   _getLocationAsync = async () => {
+    
     await GeoLocation.startLocationUpdatesAsync(LOC_TASK, {
       enableHighAccuracy: true,
       distanceInterval: 1,
@@ -110,7 +123,6 @@ export default class Map extends React.Component{
       },
       newUserLocation => {
         let { coords } = newUserLocation;
-        // console.log(coords);
         let userRegion = {
           latitude: coords.latitude,
           longitude: coords.longitude,
@@ -131,7 +143,7 @@ export default class Map extends React.Component{
             <View style={styles.container}>
 
                 <Text
-
+                    /* This text only displays if the map is not loaded and screen is clicked */
                     onPress={() => alert('Map not Loaded')}
                     style={{ fontSize: 26, fontWeight: 'bold' }}>
                     Map Screen
@@ -143,9 +155,16 @@ export default class Map extends React.Component{
                     style={styles.map}
                     showsUserLocation={this.state.followsUserLocation}
                     followsUserLocation={this.state.followsUserLocation}
+                    initialRegion={{
+                      latitude: 40.7506,
+                      longitude: -73.9935,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01
+                    }}
                     region={this.state.userRegion}
                     showsMyLocationButton={true}
                     
+                    /* On user location change, nearest locations are updated + queried for proximity */
                     onUserLocationChange={(event)=> 
                     {
                         console.log(event.nativeEvent);
@@ -177,12 +196,12 @@ export default class Map extends React.Component{
                           
                         */
                     }}
-                >
-
+                > 
+                    
                     {this.state.locations.map((loc) => {
+                      /* Below maps out each location from the database to a marker */
                             return (
                                 <Marker
-
                                     key={loc._id}
                                     title={loc.NAME}
                                     coordinate=
@@ -192,7 +211,7 @@ export default class Map extends React.Component{
                                     }}
                                 >
                                     <Callout 
-
+                                        /* Double click navigates to new journal page */
                                         style={styles.callout}
                                         onPress={() => this.props.navigation.navigate("PostJournal", {locationVal: loc._id})}>
                                         
@@ -217,6 +236,7 @@ export default class Map extends React.Component{
     }
   }
   
+  /* Styling of all components */
   const styles = StyleSheet.create({
 
     container: 
@@ -235,7 +255,6 @@ export default class Map extends React.Component{
 
     callout:
     {
-       
         alignItems:"center",
         justifyContent:"center"
     },
@@ -258,7 +277,8 @@ export default class Map extends React.Component{
 
   });
 
-  TaskManager.defineTask(LOC_TASK, async ({ data, locations, error }) => {
+  /* Manages the background user location updating */
+  TaskManager.defineTask(LOC_TASK, async ({ data, error }) => {
     if (error) {
       console.log(error);
       return;

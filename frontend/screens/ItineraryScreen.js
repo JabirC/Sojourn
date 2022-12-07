@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {Platform, StatusBar} from "react-native";
 import {
   View,
   Text,
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
+    height: Platform.OS === "android" ? StatusBar.currentHeight : 0
     // backgroundColor: "lightgreen",
   },
   buttonView: {
@@ -217,7 +219,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     height: 40,
-    borderWidth: "1%",
+    //borderWidth: "1%", //THIS LINE CAUSES CRASH ON ANDROID -TESS 12/7/22
     alignSelf: "stretch",
     paddingHorizontal: "2%",
     borderColor: "yellow",
