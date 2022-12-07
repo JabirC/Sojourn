@@ -219,6 +219,7 @@ export default class Map extends React.Component{
                     
                     {this.state.locations.map((loc) => {
                       /* Below maps out each location from the database to a marker */
+                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
                             return (
                                 <Marker
                                     key={loc._id}
@@ -235,6 +236,7 @@ export default class Map extends React.Component{
                                         onPress={() => this.props.navigation.navigate("PostJournal", {locationVal: loc._id})}>
                                         
                                         <View>
+                                          
                                             
                                             <Text style={styles.calloutTitle}>{loc.NAME}</Text>
                                         
