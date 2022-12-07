@@ -6,12 +6,14 @@ import axios from "axios";
 import  * as GeoLocation from 'expo-location';
 import * as TaskManager from "expo-task-manager";
 import {findNearest, getDistance, orderByDistance} from 'geolib';
+import { UserNameContext } from "../frontend/MainContainer";
 
 const LOC_TASK = "LOC_TASK";
 
 
 export default class Map extends React.Component{
 
+  static contextType = UserNameContext;
     state = {
       userRegion: null,
       distance: 6,
@@ -23,6 +25,10 @@ export default class Map extends React.Component{
       hasLocationPermissions: null,
       showsUserLocation: true,
       followsUserLocation : true,
+      username: null,
+      
+      
+      
     };
 
     /* Sorts locations by proximity to user location */
@@ -34,7 +40,7 @@ export default class Map extends React.Component{
         },
         
          this.state.locations)});
-         console.log("orderedLoc: " + JSON.stringify(this.state.orderedLoc))
+         console.log("\n orderedLoc: " + JSON.stringify(this.state.orderedLoc))
          
     };
 
@@ -51,7 +57,11 @@ export default class Map extends React.Component{
             this.state.orderedLoc[0]
           
           )});}   
+          console.log("\n distance: " + JSON.stringify(this.state.distance))
     };
+
+    
+    
 
     /* Sets current user location latitude + longitude */
     setCurrentLatLong = (coords) => {
@@ -65,6 +75,10 @@ export default class Map extends React.Component{
 
     async componentDidMount(){
 
+        const user = this.context
+        this.setState({username: user})
+        
+        
         /* The GeoLocation + getLocationAsync are used for realtime location tracking */
         if (Platform.OS == "ios"){
           const { status } = await GeoLocation.requestForegroundPermissionsAsync(); 
@@ -170,33 +184,38 @@ export default class Map extends React.Component{
                         console.log(event.nativeEvent);
                         this.setOrderedLoc();
                         this.setDistance();
+                        console.log("\n username: " + this.state.username)
                        
-                        if(this.state.distance <= 5)
+                        if(this.state.distance <= 20 && this.state.orderedLoc[0] != null && this.state.username != null)
                           {
-                          console.log("location is within 5 meters!")
-                          }
-                          /*axios
+                          console.log("\n" + this.state.orderedLoc[0].NAME + " is within 20 meters!")
+                          console.log("\n username: " + this.state.username)
+                          
+                          axios
                           .post("https://sojourn-user-auth.herokuapp.com/api/addvisitedlocation",
                             {
                             username: this.state.username,
-                            locationname: this.state.closestLocation.NAME,
+                            locationname: this.state.orderedLoc[0].NAME,
                             journaled: false,
-                            id: this.state.closestLocation._id,
+                            id: this.state.orderedLoc[0]._id,
                             }
                           )
-                          .catch((error) => console.error(error)),
+                          .catch((error) => console.error("\n location visited already: " + error)),
 
                           axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
                           {
                             username: this.state.username,
                             experience: 10,
                           })
-                          .catch((error) => console.error(error)),
-                          console.log("experience added!"));
+                          .catch((error) => console.error("\n experience error: " + error)),
+                          console.log("experience added!");
+                        }
+                        }}
+                        >
                           
-                        */
-                    }}
-                > 
+                        
+                    
+                 
                     
                     {this.state.locations.map((loc) => {
                       /* Below maps out each location from the database to a marker */

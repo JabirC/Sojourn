@@ -14,7 +14,7 @@ export default function MapScreen(props) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
             <Map 
                 navigation = {props.navigation}
-                username = {props.username}/>
+                user = {props.username}/>
         </View>
     );
 }
