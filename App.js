@@ -11,6 +11,8 @@ import PostJournal from './frontend/screens/PostJournal.js';
 import PublicReviewScreen from './frontend/screens/PublicReviewScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import ItineraryScreen from './frontend/screens/ItineraryScreen.js';
+import ItineraryGenScreen from './frontend/screens/ItineraryGenScreen.js'
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,11 @@ function MyStack(){
       {<Stack.Screen name = "ResetPasswordScreen" component={ResetPassword}/>}
     
       {<Stack.Screen name = "ResetUsernameScreen" component={ResetUsername}/>}
+
+      <Stack.Screen name = "ItineraryScreen" component={ItineraryScreen}/>
+
+      <Stack.Screen name = "ItineraryGenScreen" component={ItineraryGenScreen}/>
+
         
     </Stack.Navigator>
   )

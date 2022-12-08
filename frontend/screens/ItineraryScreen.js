@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ModalDropdown from 'react-native-modal-dropdown';
-import {Animated, Platform, StatusBar} from "react-native";
+import Animated, { FadeInDown, Layout, LightSpeedInLeft, Transition } from 'react-native-reanimated'
 import {
+  Platform, 
+  StatusBar,
   View,
   Text,
   StyleSheet,
@@ -17,8 +19,9 @@ import ItinSearchBar from "../../components/ItinSearchBar.js";
 import { UserNameContext } from "../MainContainer";
 import axios from "axios";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import ItineraryGenScreen from "./ItineraryGenScreen.js";
 
-export default function ItineraryScreen({ navigation }) {
+export default function ItineraryScreen({ route, navigation }) {
   const username = React.useContext(UserNameContext);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
   const [origin, setOrigin] = React.useState([]);
@@ -67,6 +70,8 @@ export default function ItineraryScreen({ navigation }) {
     //console.log(origin.NAME);
   };
 
+  
+
   const ItemView = ({ item }) => {
     return (
       <TouchableOpacity
@@ -96,12 +101,14 @@ export default function ItineraryScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       {/* ****TOP QUESTIONS**** */}
-      <View
+      <Animated.View
         style={{
           flex: 1,
           // backgroundColor: "lightblue",
           alignItems: "center",
         }}
+        entering={FadeInDown}
+        
       >
         <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: "10%" }}>
           Itching for a New Trip?
@@ -133,7 +140,7 @@ export default function ItineraryScreen({ navigation }) {
           {origin.NAME + " has been selected!"}
         </Text>
 
-      </View>
+      </Animated.View>
 
       {/* ****SEARCH BAR**** */}
       <View style={styles.searchBarStyles}>
@@ -156,7 +163,10 @@ export default function ItineraryScreen({ navigation }) {
       </View>
           
       {/* ****LOCATION COUNT**** */}
-      <View style={styles.locCount}>
+      <Animated.View
+        entering={FadeInDown}
+        layout={Layout.springify()}
+        style={styles.locCount}>
         <ModalDropdown 
           
           textStyle={{ fontSize: 25, fontWeight: "bold" }}
@@ -167,17 +177,14 @@ export default function ItineraryScreen({ navigation }) {
           onSelect=
           {index => setDestinationNum(options[index])}/>
         
-      </View>
+      </Animated.View>
 
       {/* ****BUTTON AREA**** */}
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          
-          // backgroundColor: "red",
-        }}
-      >
+      <Animated.View
+        entering={FadeInDown}
+        
+        style={{flex:1, alignItems: 'center',}}>
+     
         <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center"}}>
           Now, what's your priority for this trip?
         </Text>
@@ -214,15 +221,15 @@ export default function ItineraryScreen({ navigation }) {
             <Text style={styles.textStyle}>Similarity</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        </Animated.View>
 
       <View style={styles.buttonView}>
-          {/* BUTTON 1: COST */}
+          {/* GENERATOR */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
+            onPress={() => navigation.navigate('ItineraryGenScreen', {o:origin, Num:destinationNum, p:priority})}//console.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
           >
-            {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
+            
             <Ionicons name={"happy-outline"} size={50} />
             <Text style={{fontSize:20}}>Generate!</Text>
           </TouchableOpacity>
