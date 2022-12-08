@@ -42,6 +42,7 @@ function attemptSignIn(username, password, navigation){
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection    
             console.log("RE2");
+            alert("Loading. Standby");
             navigation.navigate("MainContainer", {username:username});
         }
     )
@@ -102,9 +103,14 @@ export default function SignInScreen({ navigation }) {
                 </Text>    
             </TouchableOpacity>
             
-            {/* Forgot Username or Password */}
-            <Text style = {styles.resetUserPass} onPress = {() => alert("Debugging state vars\n" + inputUsername + "\n" + inputPassword)}>
-                Forgot Username or Password?
+            {/* Forgot Username*/}
+            <Text style = {styles.resetUserPass} onPress = {() => navigation.navigate("ResetUsernameScreen")}>
+                Forgot Username?
+            </Text>
+
+            {/* Forgot Password*/}
+            <Text style = {styles.resetUserPass} onPress = {() => navigation.navigate("ResetPasswordScreen")}>
+                Forgot Password?
             </Text>
 
         </View>

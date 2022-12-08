@@ -10,11 +10,64 @@ import { useIsFocused } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+function comparator(low,high,num){
+    return low <= num && num <= high;
+}
+
+function determineBadgeColor(num){
+    //Red: 1-21
+    if (comparator(1,21,num)){
+        return "#cd7f32";
+    }
+    //Yellow: 22-78
+    else if (comparator(22,78,num)){
+        return "#AFAFAF";
+    }
+    //Green 79+
+    else{
+        return "#b29700";
+    }
+};
+
+function determineBadgeIcon(num){
+    var iconsize = 75;
+    //ios-body-outline: 1-2,28-35,91-104
+    if (comparator(1,2,num) || comparator(28,35,num) || comparator(91,104,num)){
+        return <Ionicons name={"ios-body-outline"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    //ios-body: 3-5,36-44,105-119
+    if (comparator(3,5,num) || comparator(36,44,num) || comparator(105,119,num)){
+        return <Ionicons name={"ios-body"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    //car-outline: 6-9,45-54,120-135
+    if (comparator(6,9,num) || comparator(45,54,num) || comparator(120,135,num)){
+        return <Ionicons name={"car-outline"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    //car: 10-14,55-65,136-152
+    if (comparator(10,14,num) || comparator(55,65,num) || comparator(136,152,num)){
+        return <Ionicons name={"car"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    //car-sport-outline:15-21,66-77,153-170
+    if (comparator(15,21,num) || comparator(66,77,num) || comparator(153,170,num)){
+        return <Ionicons name={"car-sport-outline"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    //car-sport:21-27,78-90,171+
+    if (comparator(21,27,num) || comparator(78,90,num) || num > 170){
+        return <Ionicons name={"car-sport"} size={iconsize} color={determineBadgeColor(num)} style= {{alignSelf:"center"}} />                            
+    }
+    
+    return <Ionicons name={"sad-outline"} size={iconsize}  style= {{alignSelf:"center"}} />                            
+};
+
+
 export default function ProfileScreen({ route, navigation }) {
     const username = React.useContext(UserNameContext);
     const [currentExperience, setCurrentExperience] = React.useState(0);
     const [experienceNeeded, setExperienceNeeded] = React.useState(0);
     const [level, setLevel] = React.useState("0");
+    const [numberJournalsPosted, setNumberJournalsPosted] = React.useState(0);
+    const [numberLocationsVisited, setNumberLocationsVisited] = React.useState(0);
+    const [numberNewCitiesVisited, setNumberNewCitiesVisited] = React.useState(0);
     // const username = "mogoo";
     console.log(username);
     const isFocused = useIsFocused();
@@ -35,6 +88,9 @@ export default function ProfileScreen({ route, navigation }) {
                     setCurrentExperience(response.data.currentExperience);
                     setExperienceNeeded(response.data.experienceNeeded);
                     setLevel(response.data.level);
+                    setNumberJournalsPosted(response.data.numberJournalsPosted)
+                    setNumberLocationsVisited(response.data.numberLocationsVisited)
+                    setNumberNewCitiesVisited(response.data.numberNewCitiesVisited)
                 }
             ) 
             .catch(
@@ -106,10 +162,39 @@ export default function ProfileScreen({ route, navigation }) {
             
             
             {/* Badges */}
-            <View style = {{borderColor:"blue",borderWidth:5,height:windowHeight*.35, width:windowWidth*.9, marginLeft:"5%", marginBottom:"5%",marginTop:"5%"}}>
-                    <Text style = {{fontSize:25, fontWeight:"bold"}}>
-                        Badges, not implemented yet until xp system done first
+            <Text style = {{fontSize:35, fontWeight:"bold",marginLeft:"5%",marginTop:"5%",textAlign:"center"}}>
+                Badges
+            </Text>
+
+            <View style = {{borderColor:"blue",borderWidth:5,height:windowHeight*.3, width:windowWidth*.9, marginLeft:"5%", marginBottom:"5%",marginTop:"5%",flexDirection:"row"}}>
+                <View style = {{width:windowWidth*.3}}>
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        Public Journals Posted 
                     </Text>
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        {numberJournalsPosted} 
+                    </Text>   
+                    {determineBadgeIcon(numberJournalsPosted)}
+                </View>                            
+                <View style = {{width:windowWidth*.3}}>
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        New Locations Visited 
+                    </Text>
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        {numberLocationsVisited} 
+                    </Text>   
+                    {determineBadgeIcon(numberLocationsVisited)}
+                </View>                
+                <View style = {{width:windowWidth*.25}}>
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        New Cities Visited 
+                    </Text>        
+                    <Text style = {{fontSize:25, fontWeight:"bold", textAlign:"center"}}>
+                        {numberNewCitiesVisited} 
+                    </Text>   
+                    {determineBadgeIcon(numberNewCitiesVisited)}
+                </View>                
+
             </View>
         </View>
     );
