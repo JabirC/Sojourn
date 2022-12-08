@@ -195,9 +195,9 @@ export default class Map extends React.Component{
                           .post("https://sojourn-user-auth.herokuapp.com/api/addvisitedlocation",
                             {
                             username: this.state.username,
-                            locationname: this.state.orderedLoc[0].NAME,
+                            locationName: this.state.orderedLoc[0].NAME,
                             journaled: false,
-                            id: this.state.orderedLoc[0]._id,
+                            _id: this.state.orderedLoc[0]._id,
                             }
                           )
                           .catch((error) => console.error("\n location visited already: " + error)),
