@@ -205,7 +205,7 @@ export default class Map extends React.Component{
                           axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
                           {
                             username: this.state.username,
-                            experience: 10,
+                            experience: 5,
                           })
                           .catch((error) => console.error("\n experience error: " + error)),
                           console.log("experience added!");
