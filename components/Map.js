@@ -200,14 +200,21 @@ export default class Map extends React.Component{
                             _id: this.state.orderedLoc[0]._id,
                             }
                           )
-                          .catch((error) => console.error("\n location visited already: " + error)),
 
-                          axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
-                          {
-                            username: this.state.username,
-                            experience: 5,
-                          })
-                          .catch((error) => console.error("\n experience error: " + error)),
+                          .then( 
+                            (response) => {
+                              axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
+                              {
+                                username: this.state.username,
+                                experience: 5,
+                              })
+                            })
+                            .catch((response) => console.error("\n experience error: " + response))
+                          .catch((error) => console.error("\n location visited already: " + error))
+                          
+
+                          
+                          
                           console.log("experience added!");
                         }
                         }}
