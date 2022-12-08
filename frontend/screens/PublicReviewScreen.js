@@ -16,7 +16,7 @@ export default function PublicReviewScreen({ route, navigation }) {
         if(isFocused){
             axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchLocationPublicJournals" ,
                 {
-                    locationName: "ING CAFE",
+                    locationName: route.params.locationName,
                 }
             )    
             .then(

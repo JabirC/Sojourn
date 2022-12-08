@@ -40,7 +40,7 @@ export default class Map extends React.Component{
         },
         
          this.state.locations)});
-         console.log("\n orderedLoc: " + JSON.stringify(this.state.orderedLoc))
+         //console.log("\n orderedLoc: " + JSON.stringify(this.state.orderedLoc))
          
     };
 
@@ -240,14 +240,14 @@ export default class Map extends React.Component{
                                     <Callout 
                                         /* Double click navigates to new journal page */
                                         style={styles.callout}
-                                        onPress={() => this.props.navigation.navigate("PostJournal", {locationVal: loc._id})}>
+                                        onPress={() => this.props.navigation.navigate("PublicReviewScreen", {locationName: loc.NAME})}>
                                         
                                         <View>
                                           
                                             
                                             <Text style={styles.calloutTitle}>{loc.NAME}</Text>
                                         
-                                            <Text style={styles.calloutDescription}>Post Journal?</Text>
+                                            <Text style={styles.calloutDescription}>View Public Journal?</Text>
                                         </View>
 
                                     </Callout>
