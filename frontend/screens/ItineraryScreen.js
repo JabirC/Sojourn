@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {Platform, StatusBar} from "react-native";
+import ModalDropdown from 'react-native-modal-dropdown';
+import {Animated, Platform, StatusBar} from "react-native";
 import {
   View,
   Text,
@@ -20,8 +21,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 export default function ItineraryScreen({ navigation }) {
   const username = React.useContext(UserNameContext);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
+  const [origin, setOrigin] = React.useState([]);
+  const [destinationNum, setDestinationNum] = React.useState([]);
+  const [priority, setPriority] = React.useState([]);
   const [masterLocations, setMasterLocations] = React.useState([]);
   const [search, setSearch] = React.useState("");
+  const options = ['One', 'Two', 'Three', 'Four', 'Five'];
   // let [statevar, functhatchangestahtstatevar] = React.useState([])
   React.useEffect(() => {
     axios
@@ -38,14 +43,14 @@ export default function ItineraryScreen({ navigation }) {
   }, []);
 
   const searchFilter = (text) => {
-    console.log(text);
+    //console.log(text);
     if (text) {
       // this search filter needs to be fixed
       const newLocations = masterLocations.filter((item) => {
         // const itemData = item.NAME; this line not needed for us
         const textData = text.toUpperCase();
         //ISSUE: filter for non alphabet symbols $% reject them if they show up
-        console.log(textData.toLowerCase());
+        //console.log(textData.toLowerCase());
         // console.log(textData);
         // console.log(item.NAME.indexOf(textData));
         return item.NAME.indexOf(textData) > -1;
@@ -58,9 +63,8 @@ export default function ItineraryScreen({ navigation }) {
     }
   };
 
-  const locSelectHandler = ({ item }) => {
-    // ISSUE console.log("teehee" + item.NAME); item.NAME not being passed up
-    // console.log("an item was pressed");
+  const locSelectHandler = ( origin ) => {
+    //console.log(origin.NAME);
   };
 
   const ItemView = ({ item }) => {
@@ -69,7 +73,7 @@ export default function ItineraryScreen({ navigation }) {
         style={styles.itemStyle}
         // onPress={(item) => locSelectHandler(item)}
         // ISSUE: event handling not working
-        onPress={() => console.log("pressed: " + item.NAME)}
+        onPress={() => {setOrigin(item), locSelectHandler(origin)}}
       >
         <Text
           style={{
@@ -108,14 +112,27 @@ export default function ItineraryScreen({ navigation }) {
         <Text
           style={{
             fontSize: 24,
-            fontWeight: "bold",
-            paddingTop: "10%",
+            
+            paddingTop: "5%",
             // paddingBottom: "5%",
             textAlign: "center",
           }}
         >
           Please enter your start location:
         </Text>
+
+        <Text
+          style={{
+            fontSize: 25,
+            
+            paddingTop: "30%",
+            // paddingBottom: "5%",
+            textAlign: "center",
+          }}
+        >
+          {origin.NAME + " has been selected!"}
+        </Text>
+
       </View>
 
       {/* ****SEARCH BAR**** */}
@@ -137,18 +154,19 @@ export default function ItineraryScreen({ navigation }) {
           keyExtractor={(item) => item._id}
         />
       </View>
-
+          
       {/* ****LOCATION COUNT**** */}
       <View style={styles.locCount}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-          Select number of locations:
-        </Text>
-        {/* ISSUE: Just do a dropdown menu instead */}
-        <TouchableOpacity
-          onPress={() => console.log("Location counter placeholder")}
-        >
-          <Text style={{ fontSize: 40, fontWeight: "bold" }}>#</Text>
-        </TouchableOpacity>
+        <ModalDropdown 
+          
+          textStyle={{ fontSize: 25, fontWeight: "bold" }}
+          dropdownStyle={{flex: 1, alignSelf: "stretch", width:'15%'}}
+          defaultValue={"Select Number of Destinations..."}
+          isFullWidth={true}
+          options={['One', 'Two', 'Three', 'Four', 'Five']}
+          onSelect=
+          {index => setDestinationNum(options[index])}/>
+        
       </View>
 
       {/* ****BUTTON AREA**** */}
@@ -156,42 +174,59 @@ export default function ItineraryScreen({ navigation }) {
         style={{
           flex: 1,
           alignItems: "center",
+          
           // backgroundColor: "red",
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center"}}>
           Now, what's your priority for this trip?
+        </Text>
+        <Text>
+          {"\n"}
         </Text>
         {/* ***Buttons Are Here*** */}
         <View style={styles.buttonView}>
           {/* BUTTON 1: COST */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Cost pressed")}
+            onPress={() => setPriority("cost")}
           >
             {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
-            <Ionicons name={"cash-outline"} size={100} />
+            <Ionicons name={"cash-outline"} size={75} />
             <Text style={styles.textStyle}>Cost</Text>
           </TouchableOpacity>
 
           {/* BUTTON 2: DISTANCE */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Distance pressed")}
+            onPress={() => setPriority("distance")}
           >
-            <Ionicons name={"airplane-outline"} size={100} />
+            <Ionicons name={"airplane-outline"} size={75} />
             <Text style={styles.textStyle}>Distance</Text>
           </TouchableOpacity>
 
           {/* BUTTON 3: SIMILARITY */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Similarity pressed")}
+            onPress={() => setPriority("similarity")}
           >
-            <Ionicons name={"git-branch-outline"} size={100} />
+            <Ionicons name={"git-branch-outline"} size={75} />
             <Text style={styles.textStyle}>Similarity</Text>
           </TouchableOpacity>
         </View>
+      </View>
+
+      <View style={styles.buttonView}>
+          {/* BUTTON 1: COST */}
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => console.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
+          >
+            {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
+            <Ionicons name={"happy-outline"} size={50} />
+            <Text style={{fontSize:20}}>Generate!</Text>
+          </TouchableOpacity>
+
       </View>
     </SafeAreaView>
   );
@@ -220,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textStyle: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -246,14 +281,16 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     alignSelf: "stretch",
     paddingHorizontal: "1%",
+    paddingTop: "10%"
   },
   locCount: {
     flex: 0.5,
     // backgroundColor: "yellow",
     alignSelf: "stretch",
-
+   
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    paddingBottom: '5%',
   },
 });
