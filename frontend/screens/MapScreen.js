@@ -6,16 +6,15 @@ import { UserNameContext } from "../MainContainer";
 
   
 
-export default function MapScreen(props, user) {
+export default function MapScreen(props) {
 
     const username = React.useContext(UserNameContext);
-    
   
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
             <Map 
                 navigation = {props.navigation}
-                user = {username}/>
+                user = {props.username}/>
         </View>
     );
 }
