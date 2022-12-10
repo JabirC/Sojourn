@@ -7,14 +7,13 @@ import { UserNameContext } from "../MainContainer";
   
 
 export default function MapScreen(props) {
-
     const username = React.useContext(UserNameContext);
   
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
             <Map 
                 navigation = {props.navigation}
-                user = {props.username}/>
+                user = {username}/>
         </View>
     );
 }
