@@ -26,6 +26,7 @@ function attemptSignUp(newUser, newPass, newEmail, navigation){
     .then(
         (response) => {
             // console.log(response.data); // Json of the newly added json to collection    
+            alert("Loading. Standby");
             navigation.navigate("MainContainer", {username:newUser});
 
             // navigation.goBack(); // This can make it so that user sent back to sign in after correct signup

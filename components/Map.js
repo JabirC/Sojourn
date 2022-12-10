@@ -204,18 +204,15 @@ export default class Map extends React.Component{
                           .then( 
                             (response) => {
                               axios.post("https://sojourn-user-auth.herokuapp.com/api/rankingAddOrLoseExperience",
-                              {
-                                username: this.state.username,
-                                experience: 5,
-                              })
+                                {
+                                  username: this.state.username,
+                                  experience: 5,
+                                }
+                              )
+                              .then((response) => console.log("experience added!"))
+                              .catch((response) => console.log("\n experience error: " + response))
                             })
-                            .catch((response) => console.error("\n experience error: " + response))
-                          .catch((error) => console.error("\n location visited already: " + error))
-                          
-
-                          
-                          
-                          console.log("experience added!");
+                          .catch((error) => console.log("\n location visited already: " + error))                        
                         }
                         }}
                         >
@@ -240,7 +237,7 @@ export default class Map extends React.Component{
                                     <Callout 
                                         /* Double click navigates to new journal page */
                                         style={styles.callout}
-                                        onPress={() => this.props.navigation.navigate("PublicReviewScreen", {locationName: loc.NAME})}>
+                                        onPress={() => this.props.navigation.navigate("PublicReviewScreen", {locationName: loc.NAME, username: this.props.user})}>
                                         
                                         <View>
                                           

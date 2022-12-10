@@ -11,7 +11,7 @@ const windowHeight = Dimensions.get("window").height;
 export default function PublicReviewScreen({ route, navigation }) {
     let [journalsList, setJournalsList] = React.useState([]);
     const isFocused = useIsFocused();
-
+    
     React.useEffect(() => {
         if(isFocused){
             axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchLocationPublicJournals" ,
@@ -21,8 +21,8 @@ export default function PublicReviewScreen({ route, navigation }) {
             )    
             .then(
                 (response) => {  
-                    console.log(response.data);
-                    setJournalsList(response.data.reverse());
+                    // console.log(response.data);
+                    setJournalsList(response.data);
                 }
             ) 
             .catch(
@@ -36,7 +36,7 @@ export default function PublicReviewScreen({ route, navigation }) {
 
 
     return (
-        <View style = {{flex: 1, alignItems: 'center', marginTop: "20%"}}>
+        <View style = {{flex: 1, alignItems: 'center', marginTop: "15%"}}>
         {/* Go Back */}
         <TouchableOpacity onPress={() => navigation.goBack()} style = {{alignSelf:"flex-start",position:"absolute",marginLeft:"5%",marginTop:"1.5%"}}>
             <Ionicons name={"chevron-back-circle"} size={50} color={"black"}/>
@@ -46,7 +46,7 @@ export default function PublicReviewScreen({ route, navigation }) {
             Reviews
         </Text>
         <ScrollView style = {styles.journalHistoryRec}>
-                <ReviewListAccordion data={journalsList}></ReviewListAccordion>
+                <ReviewListAccordion data={journalsList} loggedInUserName = {route.params.username}></ReviewListAccordion>
         </ScrollView>
         </View>
     );
