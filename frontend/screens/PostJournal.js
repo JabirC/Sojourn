@@ -4,6 +4,7 @@ import { UserNameContext } from "../MainContainer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
+import { Rating} from 'react-native-ratings';
 import { useIsFocused } from "@react-navigation/native";
 
 export default function PostJournal({ route, navigation }) {
@@ -12,10 +13,13 @@ export default function PostJournal({ route, navigation }) {
     let [switchVal, setSwitchVal] = React.useState(false);
     let [locationVal, setLocationVal] = React.useState("");
     let [descriptionVal, setDescriptionVal] = React.useState("");
-    let [initDropDownData, setInitDropDownData] = React.useState([]);
     let [dropDownData, setDropDownData] = React.useState([]);
+    let [dataIds, setDataIds] = React.useState([]);
+    let [rating, setRating] = React.useState(0);
     // let dropDownData = ["Statue of Liberty", "Central Park", "Empire State Building", "World Trade Center"];
     
+
+
     React.useEffect(() => {
         if(isFocused){
             axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchVisitedLocations" ,
@@ -26,13 +30,16 @@ export default function PostJournal({ route, navigation }) {
             .then(
                 (response) => {
                     let nameList = [];
-                    console.log(response.data);
+                    let idList = [];
                     nameList = response.data.map(({locationName})=>
                         locationName
                     );
-                    console.log(nameList);
-                    setDropDownData(nameList);
 
+                    idList = response.data.map(({id})=>
+                        id
+                    );
+                    setDataIds(idList);
+                    setDropDownData(nameList);
                 }
             ) 
             .catch(
@@ -68,6 +75,7 @@ export default function PostJournal({ route, navigation }) {
                                 username: route.params.username,
                                 locationName: locationVal,
                                 description: descriptionVal,
+                                rating: rating,
                                 privateEntry: switchVal
                             }
                         )    
@@ -137,10 +145,24 @@ export default function PostJournal({ route, navigation }) {
 
             <View style = {{borderBottomWidth:1, borderBottomColor:"#DFDFE2", flexDirection:"row",width:"100%", height:"5%"}}>
                     <Text style={{marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
+                        Rate this location
+                    </Text>
+                    <Rating
+                    style={{marginTop:"2%", marginLeft:"35%"}}
+                    type='star'
+                    ratingCount={5}
+                    imageSize={25}
+                    startingValue={0}
+                    onFinishRating={(rate)=>setRating(rate)}
+                    />
+            </View> 
+
+            <View style = {{borderBottomWidth:1, borderBottomColor:"#DFDFE2", flexDirection:"row",width:"100%", height:"5%"}}>
+                    <Text style={{marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
                         Make this entry private?
                     </Text>
                     <Switch 
-                        style={{marginTop:"1%", marginLeft:"35%"}}
+                        style={{marginTop:"1.75%", marginLeft:"40%"}}
                         trackColor={{false:"grey",true:"#379BD8"}} 
                         thumbColor = {"white"} 
                         value = {switchVal}
