@@ -38,12 +38,12 @@ export default function PublicReviewScreen({ route, navigation }) {
     return (
         <View style = {{flex: 1, alignItems: 'center', marginTop: "15%"}}>
         {/* Go Back */}
-        <TouchableOpacity onPress={() => navigation.goBack()} style = {{alignSelf:"flex-start",position:"absolute",marginLeft:"5%",marginTop:"1.5%"}}>
-            <Ionicons name={"chevron-back-circle"} size={50} color={"black"}/>
+        <TouchableOpacity onPress={() => navigation.goBack()} style = {{alignSelf:"flex-start",position:"absolute",marginLeft:"2%", marginTop:"2%"}}>
+            <Ionicons name={"chevron-back"} size={30} color={"black"}/>
         </TouchableOpacity>
         
         <Text style = {styles.header}>
-            Reviews
+            {route.params.locationName}
         </Text>
         <ScrollView style = {styles.journalHistoryRec}>
                 <ReviewListAccordion data={journalsList} loggedInUserName = {route.params.username}></ReviewListAccordion>
@@ -58,10 +58,11 @@ export default function PublicReviewScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
     header:{
-        fontSize: 45, 
+        fontSize: 25, 
         fontWeight: 'bold',
         textAlign:"center",
-        marginBottom:"5%"
+        marginTop:"2%",
+        marginBottom:"6%"
     },
     resetPass:{
         marginTop: "5%",
