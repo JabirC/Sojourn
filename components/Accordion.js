@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 let dateColors=["#30483b", "#3b5446"]
 let entryColors=["#395144", "#445F50"]
 
-export default function Accordion({ locationDate, locationName, locationCity, locationJournal}){
+export default function Accordion({ locationDate, locationName, locationCity, locationJournal, customPost}){
   const [isActive, setIsActive] = React.useState(false);
 
   return (
@@ -24,6 +24,7 @@ export default function Accordion({ locationDate, locationName, locationCity, lo
                         <Text style= {styles.journalEntryDate}>{format(new Date(locationDate), "yyyy")}</Text>
                     </View>
                     <View style={{backgroundColor :entryColors[1], width:"25%",flex: 4, flexDirection: "column", justifyContent: "center", alignContent:"center", paddingLeft:"3%"}}>
+                        {customPost && <Text style={{fontSize:15, color:"yellow"}}>Custom</Text>}
                         <Text style= {styles.journalEntryLocation}>{locationName}</Text>
                         <Text style= {styles.journalEntryCity}>{locationCity}</Text>
                     </View>
