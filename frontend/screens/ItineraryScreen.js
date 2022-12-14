@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
-import ModalDropdown from 'react-native-modal-dropdown';
-import Animated, { FadeInDown, Layout, LightSpeedInLeft, Transition } from 'react-native-reanimated'
+import ModalDropdown from "react-native-modal-dropdown";
+import Animated, {
+  FadeInDown,
+  Layout,
+  LightSpeedInLeft,
+  Transition,
+} from "react-native-reanimated";
 import {
-  Platform, 
+  Platform,
   StatusBar,
   View,
   Text,
@@ -24,12 +29,19 @@ import ItineraryGenScreen from "./ItineraryGenScreen.js";
 export default function ItineraryScreen({ route, navigation }) {
   const username = React.useContext(UserNameContext);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
-  const [origin, setOrigin] = React.useState([]);
-  const [destinationNum, setDestinationNum] = React.useState([]);
-  const [priority, setPriority] = React.useState([]);
   const [masterLocations, setMasterLocations] = React.useState([]);
   const [search, setSearch] = React.useState("");
-  const options = ['One', 'Two', 'Three', 'Four', 'Five'];
+
+  const [origin, setOrigin] = React.useState({});
+  const [destinationNum, setDestinationNum] = React.useState(1);
+  const [priority, setPriority] = React.useState("cost");
+
+  const [costState, setCostState] = React.useState(true);
+  const [distState, setDistState] = React.useState(false);
+  const [simState, setSimState] = React.useState(false);
+
+  const [displayOrigin, setDisplayOrigin] = React.useState("");
+  const options = [1, 2, 3, 4, 5];
   // let [statevar, functhatchangestahtstatevar] = React.useState([])
   React.useEffect(() => {
     axios
@@ -66,19 +78,18 @@ export default function ItineraryScreen({ route, navigation }) {
     }
   };
 
-  const locSelectHandler = ( origin ) => {
-    //console.log(origin.NAME);
-  };
-
-  
-
   const ItemView = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.itemStyle}
-        // onPress={(item) => locSelectHandler(item)}
-        // ISSUE: event handling not working
-        onPress={() => {setOrigin(item), locSelectHandler(origin)}}
+        onPress={() => {
+          setOrigin(item);
+          //   ,console
+          //     .log
+          //     // "item pressed is:" + item + "\n origin is:" + origin
+          //     // item
+          //     ();
+        }}
       >
         <Text
           style={{
@@ -101,14 +112,12 @@ export default function ItineraryScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       {/* ****TOP QUESTIONS**** */}
-      <Animated.View
+      <View
         style={{
           flex: 1,
           // backgroundColor: "lightblue",
           alignItems: "center",
         }}
-        entering={FadeInDown}
-        
       >
         <Text style={{ fontSize: 30, fontWeight: "bold", paddingTop: "10%" }}>
           Itching for a New Trip?
@@ -119,31 +128,18 @@ export default function ItineraryScreen({ route, navigation }) {
         <Text
           style={{
             fontSize: 24,
-            
+            fontWeight: "bold",
             paddingTop: "5%",
-            // paddingBottom: "5%",
             textAlign: "center",
           }}
         >
-          Please enter your start location:
+          Please Select a Start Location:
         </Text>
-
-        <Text
-          style={{
-            fontSize: 25,
-            
-            paddingTop: "30%",
-            // paddingBottom: "5%",
-            textAlign: "center",
-          }}
-        >
-          {origin.NAME + " has been selected!"}
-        </Text>
-
-      </Animated.View>
+      </View>
 
       {/* ****SEARCH BAR**** */}
       <View style={styles.searchBarStyles}>
+        <Text style={styles.textStyle}>{"Selected: " + origin.NAME}</Text>
         {/* <ItinSearchBar placeHolderVal="Enter Location Here"></ItinSearchBar> */}
         <TextInput
           style={styles.textInputStyle}
@@ -161,79 +157,115 @@ export default function ItineraryScreen({ route, navigation }) {
           keyExtractor={(item) => item._id}
         />
       </View>
-          
+
       {/* ****LOCATION COUNT**** */}
-      <Animated.View
-        entering={FadeInDown}
-        layout={Layout.springify()}
-        style={styles.locCount}>
-        <ModalDropdown 
-          
-          textStyle={{ fontSize: 25, fontWeight: "bold" }}
-          dropdownStyle={{flex: 1, alignSelf: "stretch", width:'15%'}}
-          defaultValue={"Select Number of Destinations..."}
+      <View
+        // entering={FadeInDown}
+        // layout={Layout.springify()}
+        style={styles.locCount}
+      >
+        <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+          Select number of additional destinations:
+        </Text>
+        <ModalDropdown
+          textStyle={{ fontSize: 40, fontWeight: "bold" }}
+          dropdownStyle={{ flex: 1, width: "10%" }}
+          defaultValue={"1"}
           isFullWidth={true}
-          options={['One', 'Two', 'Three', 'Four', 'Five']}
-          onSelect=
-          {index => setDestinationNum(options[index])}/>
-        
-      </Animated.View>
+          options={options}
+          onSelect={(index) => {
+            setDestinationNum(index + 1);
+          }}
+        />
+      </View>
 
       {/* ****BUTTON AREA**** */}
-      <Animated.View
-        entering={FadeInDown}
-        
-        style={{flex:1, alignItems: 'center',}}>
-     
-        <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center"}}>
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center" }}>
           Now, what's your priority for this trip?
-        </Text>
-        <Text>
-          {"\n"}
         </Text>
         {/* ***Buttons Are Here*** */}
         <View style={styles.buttonView}>
           {/* BUTTON 1: COST */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => setPriority("cost")}
+            onPress={() => {
+              setPriority("cost");
+              setCostState(!costState);
+              setDistState(false);
+              setSimState(false);
+            }}
           >
             {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
-            <Ionicons name={"cash-outline"} size={75} />
+            {!costState && <Ionicons name={"cash-outline"} size={75} />}
+            {costState && <Ionicons name={"cash"} size={75} />}
             <Text style={styles.textStyle}>Cost</Text>
           </TouchableOpacity>
 
           {/* BUTTON 2: DISTANCE */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => setPriority("distance")}
+            onPress={() => {
+              setPriority("distance");
+              setCostState(false);
+              setDistState(!distState);
+              setSimState(false);
+            }}
           >
-            <Ionicons name={"airplane-outline"} size={75} />
+            {!distState && <Ionicons name={"airplane-outline"} size={75} />}
+            {distState && <Ionicons name={"airplane"} size={75} />}
             <Text style={styles.textStyle}>Distance</Text>
           </TouchableOpacity>
 
           {/* BUTTON 3: SIMILARITY */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => setPriority("similarity")}
+            onPress={() => {
+              setPriority("similarity");
+              setCostState(false);
+              setDistState(false);
+              setSimState(!simState);
+            }}
           >
-            <Ionicons name={"git-branch-outline"} size={75} />
+            {!simState && <Ionicons name={"git-branch-outline"} size={75} />}
+            {simState && <Ionicons name={"git-branch"} size={75} />}
             <Text style={styles.textStyle}>Similarity</Text>
           </TouchableOpacity>
         </View>
-        </Animated.View>
+      </View>
 
-      <View style={styles.buttonView}>
-          {/* GENERATOR */}
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => navigation.navigate('ItineraryGenScreen', {o:origin, Num:destinationNum, p:priority})}//console.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
-          >
-            
-            <Ionicons name={"happy-outline"} size={50} />
-            <Text style={{fontSize:20}}>Generate!</Text>
-          </TouchableOpacity>
-
+      {/* GENERATOR VIEW */}
+      <View style={styles.buttonGeneratorView}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          // onPress={() => console.log(destinationNum)}
+          onPress={() => {
+            // console.log(origin);
+            // console.log(masterLocations);
+            // console.log(priority);
+            if (
+              Object.keys(origin).length == 0 ||
+              (costState == false && distState == false && simState == false)
+            ) {
+              if (Object.keys(origin).length == 0) {
+                alert("Please Select a Start Location");
+              } else {
+                alert("Please Select a Priority for Your Trip");
+              }
+            } else {
+              // alert("origin is defined " + origin.NAME);
+              navigation.navigate("ItineraryGenScreen", {
+                origin: origin,
+                destinationNum: destinationNum,
+                priority: priority,
+                masterLocations: masterLocations,
+              });
+            }
+          }} //sconsole.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
+        >
+          <Ionicons name={"rocket-outline"} size={35} />
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Generate!</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -244,7 +276,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    height: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    height: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     // backgroundColor: "lightgreen",
   },
   buttonView: {
@@ -260,6 +292,14 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "powderblue",
     alignItems: "center",
+  },
+  buttonGeneratorView: {
+    // for the overall view that contains all buttons
+    flex: 0.5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "turquoise",
   },
   textStyle: {
     fontSize: 20,
@@ -288,16 +328,16 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     alignSelf: "stretch",
     paddingHorizontal: "1%",
-    paddingTop: "10%"
+    // paddingTop: "10%",
   },
   locCount: {
     flex: 0.5,
-    // backgroundColor: "yellow",
+    // backgroundColor: "pink",
     alignSelf: "stretch",
-   
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingBottom: '5%',
+    justifyContent: "space-between",
+    paddingHorizontal: "5%",
+    // paddingBottom: "5%",
   },
 });
