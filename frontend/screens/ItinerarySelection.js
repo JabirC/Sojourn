@@ -86,14 +86,38 @@ export default function ItinerarySelection({ route, navigation }) {
             longitudeDelta: 0.1,
           }}
         >
-          <MapView.Marker
-            coordinate={{
-              latitude: origin.latitude,
-              longitude: origin.longitude,
-            }}
-            title="Origin"
-            description="This is where the origin is"
-          />
+          {locations.concat(origin).map((loc) => {
+                      /* Below maps out each location from the database to a marker */
+                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                            return (
+                                <Marker
+                                    key={loc._id}
+                                    title={loc.NAME}
+                                    coordinate=
+                                    {{
+                                    latitude: loc.latitude,
+                                    longitude: loc.longitude
+                                    }}
+                                >
+                                  <Callout 
+                                        /* Double click navigates to new journal page */
+                                        style={{alignItems:"center"}}>
+                                        
+                                        <View>
+                                          
+                                            
+                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
+                                        
+                                            
+                                        </View>
+
+                                    </Callout>
+                                  
+                        
+                                </Marker>
+                                
+                            )
+                        })}
           {/* <FlatList
             data={locations}
             renderItem={({ item }) => (

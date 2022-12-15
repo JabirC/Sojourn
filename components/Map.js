@@ -26,7 +26,7 @@ export default class Map extends React.Component{
       hasLocationPermissions: null,
       showsUserLocation: true,
       followsUserLocation : true,
-      username: [],
+      username: null,
       
       
       
