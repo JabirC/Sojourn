@@ -52,12 +52,10 @@ const styles = StyleSheet.create(
         },
         journalEntryLocation:{
             fontSize:20,
-            fontFamily: "Arial",
             fontWeight: "bold",
             color: "#f0faf5"
         },
         journalEntryCity:{
-            fontFamily: "Arial",
             fontSize:17,
             color: "#f0faf5"
         },
@@ -65,7 +63,6 @@ const styles = StyleSheet.create(
             flex:1,
             flexWrap: 'wrap',
             fontSize:17,
-            fontFamily: "Arial",
             paddingLeft:"3%",
             paddingTop:"3%",
             paddingRight:"3%"
