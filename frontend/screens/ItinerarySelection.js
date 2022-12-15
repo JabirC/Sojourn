@@ -98,12 +98,17 @@ export default function ItinerarySelection({ route, navigation }) {
             data={locations}
             renderItem={({ item }) => (
               <MapView.Marker
-                coordinate={item.coordinate}
-                title={item.title}
-                description={item.description}
+                coordinate={{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                }}
+                title={item.NAME}
+                // description={item.description}
               />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => {
+              item.latitude + item.longitude + item._id;
+            }}
           /> */}
         </MapView>
         <FlatList
