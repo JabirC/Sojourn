@@ -244,9 +244,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
               data={orderedLoc.slice(1, destinationNum + 1)}
               renderItem={ItemView}
               ItemSeparatorComponent={ItemSeparatorView}
-              keyExtractor={(item) => {
-                item._id;
-              }}
+              keyExtractor={(item) => item._id}
             />
           </TouchableOpacity>
           {/* ITINERARY TWO: ODD */}
