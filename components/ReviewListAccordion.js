@@ -6,7 +6,7 @@ import ReviewAccordion from "./ReviewAccordion";
 export default function ListAccordion({ data, loggedInUserName }){
     return(
         <View style={{height:"100%", width:"100%"}}> 
-            {data.map(({ _id, locationName, description, date, privateEntry, username, votes}) => (
+            {data.map(({ _id, locationName, description, date, privateEntry, username, votes, rating}) => (
                 <ReviewAccordion 
                     key={_id} 
                     locationDate={date}     
@@ -15,7 +15,8 @@ export default function ListAccordion({ data, loggedInUserName }){
                     locationJournal= {description} 
                     username={username} 
                     votes={votes} 
-                    loggedInUserName={loggedInUserName}>
+                    loggedInUserName={loggedInUserName}
+                    rating={rating}>
                 </ReviewAccordion>
              ))}
         </View>

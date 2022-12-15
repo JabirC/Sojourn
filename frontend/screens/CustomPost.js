@@ -7,7 +7,7 @@ import axios from "axios";
 import { Rating} from 'react-native-ratings';
 import { useIsFocused } from "@react-navigation/native";
 
-export default function PostJournal({ route, navigation }) {
+export default function CustomPost({ route, navigation }) {
     const isFocused = useIsFocused();
     const username = React.useContext(UserNameContext);
     let [switchVal, setSwitchVal] = React.useState(false);
@@ -22,23 +22,17 @@ export default function PostJournal({ route, navigation }) {
 
     React.useEffect(() => {
         if(isFocused){
-            axios.post( "https://sojourn-user-auth.herokuapp.com/api/fetchVisitedLocations" ,
+            axios.post( "https://sojourn-user-auth.herokuapp.com/api/getLocations" ,
                 {
-                    username: route.params.username,
+                    query: "ALL",
                 }
             )    
             .then(
                 (response) => {
                     let nameList = [];
-                    let idList = [];
-                    nameList = response.data.map(({locationName})=>
-                        locationName
+                    nameList = response.data.map(({NAME})=>
+                        NAME
                     );
-
-                    idList = response.data.map(({id})=>
-                        id
-                    );
-                    setDataIds(idList);
                     setDropDownData(nameList);
                 }
             ) 
@@ -62,7 +56,7 @@ export default function PostJournal({ route, navigation }) {
                 </TouchableOpacity>
                 <Text style={{fontWeight:"bold", fontSize:17, marginTop:"16.5%", marginLeft:"30%"}}
                 >
-                    New Entry
+                    Custom Post
                 </Text>
 
 
@@ -75,15 +69,16 @@ export default function PostJournal({ route, navigation }) {
                                 username: route.params.username,
                                 locationName: locationVal,
                                 description: descriptionVal,
-                                rating: rating,
-                                privateEntry: switchVal,
-                                custom: false
+                                rating: 0,
+                                privateEntry: true,
+                                custom: true
                             }
                         )    
                         .then(
                             (response) => {
                                 // console.log(response.data); // Json of the newly added json to collection    
                                 alert("Journal Has Been Posted!");
+                                navigation.goBack();
                                 navigation.goBack();
                             }
                         ) 
@@ -117,7 +112,7 @@ export default function PostJournal({ route, navigation }) {
                         setLocationVal(dropDownData[e]);
                     }}
                     dropdownStyle={{
-                        marginTop: "4%",
+                        marginTop: "3%",
                         width: '100%',
                         borderRadius: 10,
                         borderWidth: 0,
@@ -125,8 +120,7 @@ export default function PostJournal({ route, navigation }) {
                         overflow: 'hidden'
                     }}
                     dropdownTextStyle={{ paddingLeft:"5%",fontSize:16}}
-                >
-                </ModalDropdown>
+                />
 
             </View>
 
@@ -143,45 +137,6 @@ export default function PostJournal({ route, navigation }) {
                 >
                 </TextInput>   
             </View>
-
-            <View style = {{borderBottomWidth:1, borderBottomColor:"#DFDFE2", flexDirection:"row",width:"100%", height:"5%"}}>
-                    <Text style={{marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
-                        Rate this location
-                    </Text>
-                    <Rating
-                    style={{marginTop:"2%", marginLeft:"35%"}}
-                    type='star'
-                    ratingCount={5}
-                    imageSize={25}
-                    startingValue={0}
-                    onFinishRating={(rate)=>setRating(rate)}
-                    />
-            </View> 
-
-            <View style = {{borderBottomWidth:1, borderBottomColor:"#DFDFE2", flexDirection:"row",width:"100%", height:"5%"}}>
-                    <Text style={{marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
-                        Make this entry private?
-                    </Text>
-                    <Switch 
-                        style={{marginTop:"1.75%", marginLeft:"40%"}}
-                        trackColor={{false:"grey",true:"#379BD8"}} 
-                        thumbColor = {"white"} 
-                        value = {switchVal}
-                        onValueChange = {(value) => setSwitchVal(value)}
-                    >
-                    </Switch>
-            </View>
-            <TouchableOpacity
-                            style={{}}
-                            activeOpacity={0.3}
-                            onPress={() => {
-                                navigation.navigate("CustomPost",{username:route.params.username})
-                            }}
-                        > 
-                        <Text style={{color:"#379BD8", marginTop:"3%", paddingLeft:"4%", fontSize:16}}>
-                            Create a custom post instead?
-                        </Text>
-                    </TouchableOpacity>
         </View>
     );
 }

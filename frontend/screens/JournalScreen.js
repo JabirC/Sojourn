@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalDropdown from 'react-native-modal-dropdown';
 import axios from "axios";
 import ListAccordion from "../../components/ListAccordion";
+import { useIsFocused } from "@react-navigation/native";
 
 const ItemSeparator = () => <View style={styles.journalSeparator} />;
 
@@ -12,25 +13,28 @@ let dateColors=["#30483b", "#3b5446"]
 let entryColors=["#395144", "#445F50"]
 
 export default function JournalScreen({ navigation }) {
+    const isFocused = useIsFocused();
     const username = React.useContext(UserNameContext);
     let [journalsList, setJournalsList] = React.useState([]);
     React.useEffect(() => {
-        axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
-            {
-                username: username,
-            }
-        )    
-        .then(
-            (response) => {  
-                setJournalsList(response.data.reverse());
-            }
-        ) 
-        .catch(
-            (response) => {
-                alert(response.response.data);
-            }
-        )
-    }, [])
+        if(isFocused){
+            axios.post( "https://sojourn-user-auth.herokuapp.com/api/readjournals" ,
+                {
+                    username: username,
+                }
+            )    
+            .then(
+                (response) => {  
+                    setJournalsList(response.data.reverse());
+                }
+            ) 
+            .catch(
+                (response) => {
+                    alert(response.response.data);
+                }
+            )
+        }
+    }, [isFocused])
 
 
 
