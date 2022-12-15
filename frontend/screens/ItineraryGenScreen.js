@@ -11,8 +11,8 @@ import {
   FlatList,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import axios from "axios";
-import ItineraryScreen from "./ItineraryScreen";
+// import axios from "axios";
+
 import MapView from "react-native-maps";
 const windowWidth = Dimensions.get("window").width;
 
@@ -54,7 +54,6 @@ export default function ItineraryGenScreen({ route, navigation }) {
     // console.log(itinTwo.length);
     return finalArray;
   };
-
   const sortBySimilarity = (start, locations) => {
     let sortedBySimilarity = [];
     for (let i = 0; i < locations.length; i++) {
@@ -97,7 +96,6 @@ export default function ItineraryGenScreen({ route, navigation }) {
     // console.log(curatedLocs);
     return curatedLocs;
   };
-
   const itinThreeCurate = (locations) => {
     let curatedLocs = [];
     for (let i = 1; i < destinationNum * 2 + 1; i++) {
@@ -196,7 +194,16 @@ export default function ItineraryGenScreen({ route, navigation }) {
         {/* ITINERARIES */}
         <View style={styles.itinerarySectionView}>
           {/* ITINERARY ONE: TOP # */}
-          <TouchableOpacity style={styles.itineraryContainer}>
+          <TouchableOpacity
+            style={styles.itineraryContainer}
+            onPress={() => {
+              navigation.navigate("ItinerarySelection", {
+                origin: origin,
+                destinationNum: destinationNum,
+                locations: orderedLoc.slice(1, destinationNum + 1),
+              });
+            }}
+          >
             <MapView
               style={styles.mapStyle}
               initialRegion={{
@@ -215,7 +222,16 @@ export default function ItineraryGenScreen({ route, navigation }) {
             />
           </TouchableOpacity>
           {/* ITINERARY TWO: TOP # */}
-          <TouchableOpacity style={styles.itineraryContainer}>
+          <TouchableOpacity
+            style={styles.itineraryContainer}
+            onPress={() => {
+              navigation.navigate("ItinerarySelection", {
+                origin: origin,
+                destinationNum: destinationNum,
+                locations: itinTwo.slice(0, destinationNum + 1),
+              });
+            }}
+          >
             <MapView
               style={styles.mapStyle}
               initialRegion={{
@@ -235,7 +251,16 @@ export default function ItineraryGenScreen({ route, navigation }) {
             />
           </TouchableOpacity>
           {/* ITINERARY THREE: TOP # */}
-          <TouchableOpacity style={styles.itineraryContainer}>
+          <TouchableOpacity
+            style={styles.itineraryContainer}
+            onPress={() => {
+              navigation.navigate("ItinerarySelection", {
+                origin: origin,
+                destinationNum: destinationNum,
+                locations: itinThree.slice(0, destinationNum + 1),
+              });
+            }}
+          >
             <MapView
               style={styles.mapStyle}
               initialRegion={{
@@ -278,7 +303,6 @@ const styles = StyleSheet.create({
     // paddingTop: "20%",
     backgroundColor: "pink",
   },
-
   itinerarySectionView: {
     flex: 1,
     backgroundColor: "green",
@@ -294,7 +318,7 @@ const styles = StyleSheet.create({
   },
 
   flatListStyle: {
-    flex: 3,
+    // flex: 3,
   },
   mapStyle: {
     // flex: 1,
