@@ -85,8 +85,10 @@ export default function ProfileScreen({ route, navigation }) {
                 (response) => {  
                     console.log("SUCCESS");
                     console.log(response.data);
-                    setCurrentExperience(response.data.currentExperience);
+                    //APPARENTLY: having experienceNeeded set after currentExperience messes up the circular progress indicator, but switching the order fixes it
+                    //This is a new occurrence that never happened before
                     setExperienceNeeded(response.data.experienceNeeded);
+                    setCurrentExperience(response.data.currentExperience);
                     setLevel(response.data.level);
                     setNumberJournalsPosted(response.data.numberJournalsPosted)
                     setNumberLocationsVisited(response.data.numberLocationsVisited)
