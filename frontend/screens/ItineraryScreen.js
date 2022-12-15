@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {Platform, StatusBar} from "react-native";
+import ModalDropdown from "react-native-modal-dropdown";
+import Animated, {
+  FadeInDown,
+  Layout,
+  LightSpeedInLeft,
+  Transition,
+} from "react-native-reanimated";
 import {
+  Platform,
+  StatusBar,
   View,
   Text,
   StyleSheet,
@@ -16,12 +24,24 @@ import ItinSearchBar from "../../components/ItinSearchBar.js";
 import { UserNameContext } from "../MainContainer";
 import axios from "axios";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import ItineraryGenScreen from "./ItineraryGenScreen.js";
 
-export default function ItineraryScreen({ navigation }) {
+export default function ItineraryScreen({ route, navigation }) {
   const username = React.useContext(UserNameContext);
   const [filteredLocations, setFilteredLocations] = React.useState([]);
   const [masterLocations, setMasterLocations] = React.useState([]);
   const [search, setSearch] = React.useState("");
+
+  const [origin, setOrigin] = React.useState({});
+  const [destinationNum, setDestinationNum] = React.useState(1);
+  const [priority, setPriority] = React.useState("cost");
+
+  const [costState, setCostState] = React.useState(true);
+  const [distState, setDistState] = React.useState(false);
+  const [simState, setSimState] = React.useState(false);
+
+  const [displayOrigin, setDisplayOrigin] = React.useState("");
+  const options = ["1", "2", "3", "4", "5"];
   // let [statevar, functhatchangestahtstatevar] = React.useState([])
   React.useEffect(() => {
     axios
@@ -38,14 +58,14 @@ export default function ItineraryScreen({ navigation }) {
   }, []);
 
   const searchFilter = (text) => {
-    console.log(text);
+    //console.log(text);
     if (text) {
       // this search filter needs to be fixed
       const newLocations = masterLocations.filter((item) => {
         // const itemData = item.NAME; this line not needed for us
         const textData = text.toUpperCase();
         //ISSUE: filter for non alphabet symbols $% reject them if they show up
-        console.log(textData.toLowerCase());
+        //console.log(textData.toLowerCase());
         // console.log(textData);
         // console.log(item.NAME.indexOf(textData));
         return item.NAME.indexOf(textData) > -1;
@@ -58,18 +78,18 @@ export default function ItineraryScreen({ navigation }) {
     }
   };
 
-  const locSelectHandler = ({ item }) => {
-    // ISSUE console.log("teehee" + item.NAME); item.NAME not being passed up
-    // console.log("an item was pressed");
-  };
-
   const ItemView = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.itemStyle}
-        // onPress={(item) => locSelectHandler(item)}
-        // ISSUE: event handling not working
-        onPress={() => console.log("pressed: " + item.NAME)}
+        onPress={() => {
+          setOrigin(item);
+          //   ,console
+          //     .log
+          //     // "item pressed is:" + item + "\n origin is:" + origin
+          //     // item
+          //     ();
+        }}
       >
         <Text
           style={{
@@ -109,17 +129,17 @@ export default function ItineraryScreen({ navigation }) {
           style={{
             fontSize: 24,
             fontWeight: "bold",
-            paddingTop: "10%",
-            // paddingBottom: "5%",
+            paddingTop: "5%",
             textAlign: "center",
           }}
         >
-          Please enter your start location:
+          Please Select a Start Location:
         </Text>
       </View>
 
       {/* ****SEARCH BAR**** */}
       <View style={styles.searchBarStyles}>
+        <Text style={styles.textStyle}>{"Selected: " + origin.NAME}</Text>
         {/* <ItinSearchBar placeHolderVal="Enter Location Here"></ItinSearchBar> */}
         <TextInput
           style={styles.textInputStyle}
@@ -139,27 +159,29 @@ export default function ItineraryScreen({ navigation }) {
       </View>
 
       {/* ****LOCATION COUNT**** */}
-      <View style={styles.locCount}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-          Select number of locations:
+      <View
+        // entering={FadeInDown}
+        // layout={Layout.springify()}
+        style={styles.locCount}
+      >
+        <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+          Select number of additional destinations:
         </Text>
-        {/* ISSUE: Just do a dropdown menu instead */}
-        <TouchableOpacity
-          onPress={() => console.log("Location counter placeholder")}
-        >
-          <Text style={{ fontSize: 40, fontWeight: "bold" }}>#</Text>
-        </TouchableOpacity>
+        <ModalDropdown
+          textStyle={{ fontSize: 40, fontWeight: "bold" }}
+          dropdownStyle={{ flex: 1, width: "10%" }}
+          defaultValue={destinationNum.toString()}
+          isFullWidth={true}
+          options={options}
+          onSelect={(index) => {
+            setDestinationNum(index + 1);
+          }}
+        />
       </View>
 
       {/* ****BUTTON AREA**** */}
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          // backgroundColor: "red",
-        }}
-      >
-        <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center" }}>
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", textAlign: "center" }}>
           Now, what's your priority for this trip?
         </Text>
         {/* ***Buttons Are Here*** */}
@@ -167,31 +189,83 @@ export default function ItineraryScreen({ navigation }) {
           {/* BUTTON 1: COST */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Cost pressed")}
+            onPress={() => {
+              setPriority("cost");
+              setCostState(!costState);
+              setDistState(false);
+              setSimState(false);
+            }}
           >
             {/* will likely need to make it similar to the tab bar icon set up in maincontainer.js but leaving it as just icons for now */}
-            <Ionicons name={"cash-outline"} size={100} />
+            {!costState && <Ionicons name={"cash-outline"} size={75} />}
+            {costState && <Ionicons name={"cash"} size={75} />}
             <Text style={styles.textStyle}>Cost</Text>
           </TouchableOpacity>
 
           {/* BUTTON 2: DISTANCE */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Distance pressed")}
+            onPress={() => {
+              setPriority("distance");
+              setCostState(false);
+              setDistState(!distState);
+              setSimState(false);
+            }}
           >
-            <Ionicons name={"airplane-outline"} size={100} />
+            {!distState && <Ionicons name={"airplane-outline"} size={75} />}
+            {distState && <Ionicons name={"airplane"} size={75} />}
             <Text style={styles.textStyle}>Distance</Text>
           </TouchableOpacity>
 
           {/* BUTTON 3: SIMILARITY */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => console.log("Similarity pressed")}
+            onPress={() => {
+              setPriority("similarity");
+              setCostState(false);
+              setDistState(false);
+              setSimState(!simState);
+            }}
           >
-            <Ionicons name={"git-branch-outline"} size={100} />
+            {!simState && <Ionicons name={"git-branch-outline"} size={75} />}
+            {simState && <Ionicons name={"git-branch"} size={75} />}
             <Text style={styles.textStyle}>Similarity</Text>
           </TouchableOpacity>
         </View>
+      </View>
+
+      {/* GENERATOR VIEW */}
+      <View style={styles.buttonGeneratorView}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          // onPress={() => console.log(destinationNum)}
+          onPress={() => {
+            // console.log(origin);
+            // console.log(masterLocations);
+            // console.log(priority);
+            if (
+              Object.keys(origin).length == 0 ||
+              (costState == false && distState == false && simState == false)
+            ) {
+              if (Object.keys(origin).length == 0) {
+                alert("Please Select a Start Location");
+              } else {
+                alert("Please Select a Priority for Your Trip");
+              }
+            } else {
+              // alert("origin is defined " + origin.NAME);
+              navigation.navigate("ItineraryGenScreen", {
+                origin: origin,
+                destinationNum: destinationNum,
+                priority: priority,
+                masterLocations: masterLocations,
+              });
+            }
+          }} //sconsole.log("Origin: " + origin.NAME + "\n Number of Destinations: " + destinationNum + "\n Priority: " + priority)}
+        >
+          <Ionicons name={"rocket-outline"} size={35} />
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Generate!</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -202,7 +276,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    height: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    height: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     // backgroundColor: "lightgreen",
   },
   buttonView: {
@@ -219,8 +293,16 @@ const styles = StyleSheet.create({
     // backgroundColor: "powderblue",
     alignItems: "center",
   },
+  buttonGeneratorView: {
+    // for the overall view that contains all buttons
+    flex: 0.5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "turquoise",
+  },
   textStyle: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -246,14 +328,16 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     alignSelf: "stretch",
     paddingHorizontal: "1%",
+    // paddingTop: "10%",
   },
   locCount: {
     flex: 0.5,
-    // backgroundColor: "yellow",
+    // backgroundColor: "pink",
     alignSelf: "stretch",
-
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: "5%",
+    // paddingBottom: "5%",
   },
 });

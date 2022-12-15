@@ -14,6 +14,7 @@ const LOC_TASK = "LOC_TASK";
 export default class Map extends React.Component{
 
   static contextType = UserNameContext;
+  
     state = {
       userRegion: null,
       distance: 6,
@@ -25,11 +26,13 @@ export default class Map extends React.Component{
       hasLocationPermissions: null,
       showsUserLocation: true,
       followsUserLocation : true,
-      username: null,
+      username: [],
       
       
       
     };
+
+   
 
     /* Sorts locations by proximity to user location */
     setOrderedLoc = () => {
@@ -78,7 +81,6 @@ export default class Map extends React.Component{
         const user = this.context
         this.setState({username: user})
         
-        
         /* The GeoLocation + getLocationAsync are used for realtime location tracking */
         if (Platform.OS == "ios"){
           const { status } = await GeoLocation.requestForegroundPermissionsAsync(); 
@@ -122,6 +124,7 @@ export default class Map extends React.Component{
     
 /*Realtime Location Tracking*/
   _getLocationAsync = async () => {
+    
     
     await GeoLocation.startLocationUpdatesAsync(LOC_TASK, {
       enableHighAccuracy: true,
@@ -182,6 +185,7 @@ export default class Map extends React.Component{
                     onUserLocationChange={(event)=> 
                     {
                         console.log(event.nativeEvent);
+                        
                         this.setOrderedLoc();
                         this.setDistance();
                         console.log("\n username: " + this.state.username)
