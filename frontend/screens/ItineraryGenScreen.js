@@ -13,7 +13,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 // import axios from "axios";
 
-import MapView from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 const windowWidth = Dimensions.get("window").width;
 
 /* To go through and generate itineraries, iterate through the sorted array of locations
@@ -104,7 +104,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
         curatedLocs.push(locations[i]);
       }
     }
-    console.log(curatedLocs);
+    // console.log(curatedLocs);
     return curatedLocs;
   };
 
@@ -115,14 +115,14 @@ export default function ItineraryGenScreen({ route, navigation }) {
     // console.log("priority is: " + priority);
     // console.log(origin);
     if (priority === "cost") {
-      console.log("in priority === cost");
+      // console.log("in priority === cost");
       setOrderedLoc(sortByCost(masterLocations));
       // console.log(setItinTwo(itinTwoCurate(orderedLoc)));
     } else if (priority === "distance") {
-      console.log("in priority === distance");
+      // console.log("in priority === distance");
       setOrderedLoc(sortByDistance(masterLocations));
     } else if (priority === "similarity") {
-      console.log("in priority === similarity");
+      // console.log("in priority === similarity");
       setOrderedLoc(sortBySimilarity(origin, masterLocations));
     }
   }, []);
@@ -205,6 +205,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
             }}
           >
             <MapView
+              provider={PROVIDER_GOOGLE}
               style={styles.mapStyle}
               initialRegion={{
                 latitude: origin.latitude,
@@ -212,16 +213,43 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,
               }}
-            />
+            >
+              <MapView.Marker
+                coordinate={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
+                }}
+                title="Origin"
+                description="This is where the origin is"
+              />
+              {/* <FlatList
+                data={orderedLoc.slice(1, destinationNum + 1)}
+                renderItem={({ item }) => (
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    }}
+                    // title={item.NAME}
+                    // description={item.description}
+                  />
+                )}
+                keyExtractor={(item, index) => {
+                  item._id + index.toString();
+                }}nmp
+              /> */}
+            </MapView>
             <FlatList
               // data={orderedLoc}
               data={orderedLoc.slice(1, destinationNum + 1)}
               renderItem={ItemView}
               ItemSeparatorComponent={ItemSeparatorView}
-              keyExtractor={(item) => item._id}
+              keyExtractor={(item) => {
+                item._id;
+              }}
             />
           </TouchableOpacity>
-          {/* ITINERARY TWO: TOP # */}
+          {/* ITINERARY TWO: ODD */}
           <TouchableOpacity
             style={styles.itineraryContainer}
             onPress={() => {
@@ -233,6 +261,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
             }}
           >
             <MapView
+              provider={PROVIDER_GOOGLE}
               style={styles.mapStyle}
               initialRegion={{
                 latitude: origin.latitude,
@@ -240,7 +269,16 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,
               }}
-            />
+            >
+              <MapView.Marker
+                coordinate={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
+                }}
+                title="Origin"
+                description="This is where the origin is"
+              />
+            </MapView>
             <FlatList
               // data={orderedLoc}
               data={itinTwo.slice(0, destinationNum + 1)}
@@ -250,7 +288,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
               // keyExtractor={(item, index) => "key" + index}
             />
           </TouchableOpacity>
-          {/* ITINERARY THREE: TOP # */}
+          {/* ITINERARY THREE: EVEN */}
           <TouchableOpacity
             style={styles.itineraryContainer}
             onPress={() => {
@@ -262,6 +300,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
             }}
           >
             <MapView
+              provider={PROVIDER_GOOGLE}
               style={styles.mapStyle}
               initialRegion={{
                 latitude: origin.latitude,
@@ -269,7 +308,16 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,
               }}
-            />
+            >
+              <MapView.Marker
+                coordinate={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
+                }}
+                title="Origin"
+                description="This is where the origin is"
+              />
+            </MapView>
             <FlatList
               // data={orderedLoc}
               data={itinThree.slice(0, destinationNum + 1)}

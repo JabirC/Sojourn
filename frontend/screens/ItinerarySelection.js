@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 // import axios from "axios";
-
-import MapView from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 const windowWidth = Dimensions.get("window").width;
 
 export default function ItinerarySelection({ route, navigation }) {
@@ -78,6 +77,7 @@ export default function ItinerarySelection({ route, navigation }) {
       {/* ITINERARY Area */}
       <View>
         <MapView
+          provider={PROVIDER_GOOGLE}
           style={styles.mapStyle}
           initialRegion={{
             latitude: origin.latitude,
@@ -85,7 +85,16 @@ export default function ItinerarySelection({ route, navigation }) {
             latitudeDelta: 0.1,
             longitudeDelta: 0.1,
           }}
-        />
+        >
+          <MapView.Marker
+            coordinate={{
+              latitude: origin.latitude,
+              longitude: origin.longitude,
+            }}
+            title="Origin"
+            description="This is where the origin is"
+          />
+        </MapView>
         <FlatList
           // data={orderedLoc}
           data={locations}
