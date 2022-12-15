@@ -94,6 +94,22 @@ export default function ItinerarySelection({ route, navigation }) {
             title="Origin"
             description="This is where the origin is"
           />
+          {/* <FlatList
+            data={locations}
+            renderItem={({ item }) => (
+              <MapView.Marker
+                coordinate={{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                }}
+                title={item.NAME}
+                // description={item.description}
+              />
+            )}
+            keyExtractor={(item) => {
+              item.latitude + item.longitude + item._id;
+            }}
+          /> */}
         </MapView>
         <FlatList
           // data={orderedLoc}

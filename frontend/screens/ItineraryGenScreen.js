@@ -230,13 +230,13 @@ export default function ItineraryGenScreen({ route, navigation }) {
                       latitude: item.latitude,
                       longitude: item.longitude,
                     }}
-                    // title={item.NAME}
+                    title={item.NAME}
                     // description={item.description}
                   />
                 )}
-                keyExtractor={(item, index) => {
-                  item._id + index.toString();
-                }}nmp
+                keyExtractor={(item) => {
+                  item.latitude + item._id;
+                }}
               /> */}
             </MapView>
             <FlatList
@@ -244,9 +244,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
               data={orderedLoc.slice(1, destinationNum + 1)}
               renderItem={ItemView}
               ItemSeparatorComponent={ItemSeparatorView}
-              keyExtractor={(item) => {
-                item._id;
-              }}
+              keyExtractor={(item) => item._id}
             />
           </TouchableOpacity>
           {/* ITINERARY TWO: ODD */}
@@ -278,6 +276,22 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 title="Origin"
                 description="This is where the origin is"
               />
+              {/* <FlatList
+                data={itinTwo.slice(0, destinationNum + 1)}
+                renderItem={({ item }) => (
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    }}
+                    title={item.NAME}
+                    // description={item.description}
+                  />
+                )}
+                keyExtractor={(item) => {
+                  item.latitude + item._id;
+                }}
+              /> */}
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -317,6 +331,22 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 title="Origin"
                 description="This is where the origin is"
               />
+              {/* <FlatList
+                data={itinThree.slice(0, destinationNum + 1)}
+                renderItem={({ item }) => (
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    }}
+                    title={item.NAME}
+                    // description={item.description}
+                  />
+                )}
+                keyExtractor={(item) => {
+                  item.longitude + item._id;
+                }}
+              /> */}
             </MapView>
             <FlatList
               // data={orderedLoc}
