@@ -5,8 +5,11 @@ import SignInScreen from './frontend/screens/SignInScreen.js';
 import SignUpScreen from './frontend/screens/SignUpScreen.js';
 import SettingsScreen from './frontend/screens/SettingsScreen.js';
 import ChangePassword from './frontend/screens/ChangePassword.js';
+import ResetPassword from './frontend/screens/ResetPasswordScreen.js';
+import ResetUsername from './frontend/screens/ResetUsernameScreen.js';
 import PostJournal from './frontend/screens/PostJournal.js';
 import CustomPost from './frontend/screens/CustomPost.js';
+import PublicReviewScreen from './frontend/screens/PublicReviewScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -29,6 +32,12 @@ function MyStack(){
       <Stack.Screen name = "PostJournal" component={PostJournal}/>
 
       <Stack.Screen name = "CustomPost" component={CustomPost}/>
+      
+      <Stack.Screen name = "PublicReviewScreen" component={PublicReviewScreen}/>
+        
+      {<Stack.Screen name = "ResetPasswordScreen" component={ResetPassword}/>}
+    
+      {<Stack.Screen name = "ResetUsernameScreen" component={ResetUsername}/>}
         
     </Stack.Navigator>
   )
