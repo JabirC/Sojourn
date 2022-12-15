@@ -41,7 +41,7 @@ export default function ItineraryScreen({ route, navigation }) {
   const [simState, setSimState] = React.useState(false);
 
   const [displayOrigin, setDisplayOrigin] = React.useState("");
-  const options = [1, 2, 3, 4, 5];
+  const options = ["1", "2", "3", "4", "5"];
   // let [statevar, functhatchangestahtstatevar] = React.useState([])
   React.useEffect(() => {
     axios
@@ -170,7 +170,7 @@ export default function ItineraryScreen({ route, navigation }) {
         <ModalDropdown
           textStyle={{ fontSize: 40, fontWeight: "bold" }}
           dropdownStyle={{ flex: 1, width: "10%" }}
-          defaultValue={"1"}
+          defaultValue={destinationNum.toString()}
           isFullWidth={true}
           options={options}
           onSelect={(index) => {
