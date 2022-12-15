@@ -13,7 +13,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 // import axios from "axios";
 
-import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Polyline, Callout} from "react-native-maps";
 const windowWidth = Dimensions.get("window").width;
 
 /* To go through and generate itineraries, iterate through the sorted array of locations
@@ -39,6 +39,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
   const [orderedLoc, setOrderedLoc] = React.useState([]);
   const [itinTwo, setItinTwo] = React.useState([]);
   const [itinThree, setItinThree] = React.useState([]);
+  const [markerLocations, setMarkerLocations] = React.useState([]);
   // console.log("heha");
   // console.log(masterLocations);
 
@@ -96,6 +97,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
     // console.log(curatedLocs);
     return curatedLocs;
   };
+
   const itinThreeCurate = (locations) => {
     let curatedLocs = [];
     for (let i = 1; i < destinationNum * 2 + 1; i++) {
@@ -125,6 +127,10 @@ export default function ItineraryGenScreen({ route, navigation }) {
       // console.log("in priority === similarity");
       setOrderedLoc(sortBySimilarity(origin, masterLocations));
     }
+  }, []);
+
+  React.useEffect(() => {
+    setMarkerLocations(orderedLoc.slice(1, destinationNum + 1).concat(origin))
   }, []);
 
   const ItemView = ({ item }) => {
@@ -210,34 +216,48 @@ export default function ItineraryGenScreen({ route, navigation }) {
               initialRegion={{
                 latitude: origin.latitude,
                 longitude: origin.longitude,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
+                latitudeDelta: 0.04,
+                longitudeDelta: 0.04,
               }}
             >
-              <MapView.Marker
-                coordinate={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                title="Origin"
-                description="This is where the origin is"
-              />
-              {/* <FlatList
-                data={orderedLoc.slice(1, destinationNum + 1)}
-                renderItem={({ item }) => (
-                  <MapView.Marker
-                    coordinate={{
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                    }}
-                    title={item.NAME}
-                    // description={item.description}
-                  />
-                )}
-                keyExtractor={(item) => {
-                  item.latitude + item._id;
-                }}
-              /> */}
+              {orderedLoc.slice(0, destinationNum+1).map((loc) => {
+                      /* Below maps out each location from the database to a marker */
+                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                            return (
+                                <Marker
+                                    key={loc._id}
+                                    title={loc.NAME}
+                                    coordinate=
+                                    {{
+                                    latitude: loc.latitude,
+                                    longitude: loc.longitude
+                                    }}
+                                >
+                                  <Callout 
+                                        /* Double click navigates to new journal page */
+                                        style={{alignItems:"center"}}>
+                                        
+                                        <View>
+                                          
+                                            
+                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
+                                        
+                                            
+                                        </View>
+
+                                    </Callout>
+
+                        
+                                </Marker>  
+                                
+                            )
+                        })}
+
+                        
+                        
+                        
+
+              
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -264,18 +284,42 @@ export default function ItineraryGenScreen({ route, navigation }) {
               initialRegion={{
                 latitude: origin.latitude,
                 longitude: origin.longitude,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
+                latitudeDelta: 0.04,
+                longitudeDelta: 0.04,
               }}
             >
-              <MapView.Marker
-                coordinate={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                title="Origin"
-                description="This is where the origin is"
-              />
+              {itinTwo.slice(0, destinationNum+1).concat(origin).map((loc) => {
+                      /* Below maps out each location from the database to a marker */
+                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                            return (
+                                <Marker
+                                    key={loc._id}
+                                    title={loc.NAME}
+                                    coordinate=
+                                    {{
+                                    latitude: loc.latitude,
+                                    longitude: loc.longitude
+                                    }}
+                                >
+                                  <Callout 
+                                        /* Double click navigates to new journal page */
+                                        style={{alignItems:"center"}}>
+                                        
+                                        <View>
+                                          
+                                            
+                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
+                                        
+                                            
+                                        </View>
+
+                                    </Callout>
+                                  
+                        
+                                </Marker>
+                                
+                            )
+                        })}
               {/* <FlatList
                 data={itinTwo.slice(0, destinationNum + 1)}
                 renderItem={({ item }) => (
@@ -319,18 +363,42 @@ export default function ItineraryGenScreen({ route, navigation }) {
               initialRegion={{
                 latitude: origin.latitude,
                 longitude: origin.longitude,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
+                latitudeDelta: 0.04,
+                longitudeDelta: 0.04,
               }}
             >
-              <MapView.Marker
-                coordinate={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                title="Origin"
-                description="This is where the origin is"
-              />
+              {itinThree.slice(0, destinationNum+1).concat(origin).map((loc) => {
+                      /* Below maps out each location from the database to a marker */
+                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                            return (
+                                <Marker
+                                    key={loc._id}
+                                    title={loc.NAME}
+                                    coordinate=
+                                    {{
+                                    latitude: loc.latitude,
+                                    longitude: loc.longitude
+                                    }}
+                                >
+                                  <Callout 
+                                        /* Double click navigates to new journal page */
+                                        style={{alignItems:"center"}}>
+                                        
+                                        <View>
+                                          
+                                            
+                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
+                                        
+                                            
+                                        </View>
+
+                                    </Callout>
+                                  
+                        
+                                </Marker>
+                                
+                            )
+                        })}
               {/* <FlatList
                 data={itinThree.slice(0, destinationNum + 1)}
                 renderItem={({ item }) => (

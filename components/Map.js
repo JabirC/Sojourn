@@ -13,7 +13,7 @@ const LOC_TASK = "LOC_TASK";
 
 export default class Map extends React.Component{
 
-  static contextType = UserNameContext;
+  //static contextType = UserNameContext;
   
     state = {
       userRegion: null,
@@ -26,7 +26,7 @@ export default class Map extends React.Component{
       hasLocationPermissions: null,
       showsUserLocation: true,
       followsUserLocation : true,
-      username: [],
+      username: null,
       
       
       
@@ -78,8 +78,9 @@ export default class Map extends React.Component{
 
     async componentDidMount(){
 
-        const user = this.context
-        this.setState({username: user})
+        //const user = this.context
+        this.setState({username: this.props.user})
+        
         
         /* The GeoLocation + getLocationAsync are used for realtime location tracking */
         if (Platform.OS == "ios"){
