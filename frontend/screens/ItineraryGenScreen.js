@@ -167,8 +167,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
         style={{
           flex: 1,
           alignItems: "center",
-          marginTop: "5%",
-          backgroundColor: "dodgerblue",
+          marginTop: "5%"
         }}
       >
         {/* Go Back */}
@@ -435,9 +434,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "yellow",
     height: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    // backgroundColor: "lightgreen",
     // paddingTop: "5%",
   },
   header: {
@@ -447,11 +444,9 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     // marginBottom: "5%",
     // paddingTop: "20%",
-    backgroundColor: "pink",
   },
   itinerarySectionView: {
     flex: 1,
-    backgroundColor: "green",
     // alignSelf: "stretch",
   },
   itineraryContainer: {
@@ -459,7 +454,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     // alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "turquoise",
     alignItems: "center",
   },
 

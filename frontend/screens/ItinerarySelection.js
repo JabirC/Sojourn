@@ -152,9 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     // alignItems: "center",
-    backgroundColor: "yellow",
     height: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    // backgroundColor: "lightgreen",
     // paddingTop: "5%",
   },
   header: {
@@ -164,7 +162,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     // marginBottom: "5%",
     // paddingTop: "20%",
-    backgroundColor: "pink",
   },
   flatListStyle: {
     flex: 3,
