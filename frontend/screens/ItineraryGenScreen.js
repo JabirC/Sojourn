@@ -11,9 +11,18 @@ import {
   FlatList,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+
 // import axios from "axios";
 
-import MapView, { Marker, PROVIDER_GOOGLE, Polyline, Callout} from "react-native-maps";
+import MapView, {
+  Marker,
+  PROVIDER_GOOGLE,
+  Polyline,
+  Callout,
+} from "react-native-maps";
+
+import MapViewDirections from "react-native-maps-directions";
+const GOOGLE_MAPS_APIKEY = "AIzaSyAFqLtnYV2b0RnO1Gl-0yVvLnqrIdaQgUI";
 const windowWidth = Dimensions.get("window").width;
 
 /* To go through and generate itineraries, iterate through the sorted array of locations
@@ -40,6 +49,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
   const [itinTwo, setItinTwo] = React.useState([]);
   const [itinThree, setItinThree] = React.useState([]);
   const [markerLocations, setMarkerLocations] = React.useState([]);
+  const [itinOneDest, setItinOneDest] = React.useState([]);
   // console.log("heha");
   // console.log(masterLocations);
 
@@ -130,7 +140,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
   }, []);
 
   React.useEffect(() => {
-    setMarkerLocations(orderedLoc.slice(1, destinationNum + 1).concat(origin))
+    setMarkerLocations(orderedLoc.slice(1, destinationNum + 1).concat(origin));
   }, []);
 
   const ItemView = ({ item }) => {
@@ -208,6 +218,10 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 destinationNum: destinationNum,
                 locations: orderedLoc.slice(1, destinationNum + 1),
               });
+              console.log(
+                orderedLoc[1].latitude,
+                +"" + orderedLoc[1].longitude
+              );
             }}
           >
             <MapView
@@ -220,44 +234,43 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 longitudeDelta: 0.04,
               }}
             >
-              {orderedLoc.slice(0, destinationNum+1).map((loc) => {
-                      /* Below maps out each location from the database to a marker */
-                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
-                            return (
-                                <Marker
-                                    key={loc._id}
-                                    title={loc.NAME}
-                                    coordinate=
-                                    {{
-                                    latitude: loc.latitude,
-                                    longitude: loc.longitude
-                                    }}
-                                >
-                                  <Callout 
-                                        /* Double click navigates to new journal page */
-                                        style={{alignItems:"center"}}>
-                                        
-                                        <View>
-                                          
-                                            
-                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
-                                        
-                                            
-                                        </View>
-
-                                    </Callout>
-
-                        
-                                </Marker>  
-                                
-                            )
-                        })}
-
-                        
-                        
-                        
-
-              
+              {orderedLoc.slice(0, destinationNum + 1).map((loc) => {
+                /* Below maps out each location from the database to a marker */
+                /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                return (
+                  <Marker
+                    key={loc._id}
+                    title={loc.NAME}
+                    coordinate={{
+                      latitude: loc.latitude,
+                      longitude: loc.longitude,
+                    }}
+                  >
+                    <Callout
+                      /* Double click navigates to new journal page */
+                      style={{ alignItems: "center" }}
+                    >
+                      <View>
+                        <Text style={{ fontSize: 8 }}>{loc.NAME}</Text>
+                      </View>
+                    </Callout>
+                  </Marker>
+                );
+              })}
+              <MapViewDirections
+                // key={loc._id}
+                origin={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
+                }}
+                destination={{
+                  latitude: 37.3318456,
+                  longitude: -122.0296002,
+                }}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -288,54 +301,46 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 longitudeDelta: 0.04,
               }}
             >
-              {itinTwo.slice(0, destinationNum+1).concat(origin).map((loc) => {
-                      /* Below maps out each location from the database to a marker */
-                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
-                            return (
-                                <Marker
-                                    key={loc._id}
-                                    title={loc.NAME}
-                                    coordinate=
-                                    {{
-                                    latitude: loc.latitude,
-                                    longitude: loc.longitude
-                                    }}
-                                >
-                                  <Callout 
-                                        /* Double click navigates to new journal page */
-                                        style={{alignItems:"center"}}>
-                                        
-                                        <View>
-                                          
-                                            
-                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
-                                        
-                                            
-                                        </View>
-
-                                    </Callout>
-                                  
-                        
-                                </Marker>
-                                
-                            )
-                        })}
-              {/* <FlatList
-                data={itinTwo.slice(0, destinationNum + 1)}
-                renderItem={({ item }) => (
-                  <MapView.Marker
-                    coordinate={{
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                    }}
-                    title={item.NAME}
-                    // description={item.description}
-                  />
-                )}
-                keyExtractor={(item) => {
-                  item.latitude + item._id;
+              {itinTwo
+                .slice(0, destinationNum + 1)
+                .concat(origin)
+                .map((loc) => {
+                  /* Below maps out each location from the database to a marker */
+                  /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                  return (
+                    <Marker
+                      key={loc._id}
+                      title={loc.NAME}
+                      coordinate={{
+                        latitude: loc.latitude,
+                        longitude: loc.longitude,
+                      }}
+                    >
+                      <Callout
+                        /* Double click navigates to new journal page */
+                        style={{ alignItems: "center" }}
+                      >
+                        <View>
+                          <Text style={{ fontSize: 8 }}>{loc.NAME}</Text>
+                        </View>
+                      </Callout>
+                    </Marker>
+                  );
+                })}
+              <MapViewDirections
+                // key={loc._id}
+                origin={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
                 }}
-              /> */}
+                destination={{
+                  latitude: itinTwo[destinationNum].latitude,
+                  longitude: itinTwo[destinationNum].longitude,
+                }}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -367,54 +372,46 @@ export default function ItineraryGenScreen({ route, navigation }) {
                 longitudeDelta: 0.04,
               }}
             >
-              {itinThree.slice(0, destinationNum+1).concat(origin).map((loc) => {
-                      /* Below maps out each location from the database to a marker */
-                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
-                            return (
-                                <Marker
-                                    key={loc._id}
-                                    title={loc.NAME}
-                                    coordinate=
-                                    {{
-                                    latitude: loc.latitude,
-                                    longitude: loc.longitude
-                                    }}
-                                >
-                                  <Callout 
-                                        /* Double click navigates to new journal page */
-                                        style={{alignItems:"center"}}>
-                                        
-                                        <View>
-                                          
-                                            
-                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
-                                        
-                                            
-                                        </View>
-
-                                    </Callout>
-                                  
-                        
-                                </Marker>
-                                
-                            )
-                        })}
-              {/* <FlatList
-                data={itinThree.slice(0, destinationNum + 1)}
-                renderItem={({ item }) => (
-                  <MapView.Marker
-                    coordinate={{
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                    }}
-                    title={item.NAME}
-                    // description={item.description}
-                  />
-                )}
-                keyExtractor={(item) => {
-                  item.longitude + item._id;
+              {itinThree
+                .slice(0, destinationNum + 1)
+                .concat(origin)
+                .map((loc) => {
+                  /* Below maps out each location from the database to a marker */
+                  /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+                  return (
+                    <Marker
+                      key={loc._id}
+                      title={loc.NAME}
+                      coordinate={{
+                        latitude: loc.latitude,
+                        longitude: loc.longitude,
+                      }}
+                    >
+                      <Callout
+                        /* Double click navigates to new journal page */
+                        style={{ alignItems: "center" }}
+                      >
+                        <View>
+                          <Text style={{ fontSize: 8 }}>{loc.NAME}</Text>
+                        </View>
+                      </Callout>
+                    </Marker>
+                  );
+                })}
+              <MapViewDirections
+                // key={loc._id}
+                origin={{
+                  latitude: origin.latitude,
+                  longitude: origin.longitude,
                 }}
-              /> */}
+                destination={{
+                  latitude: 37.3318456,
+                  longitude: -122.0296002,
+                }}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
             </MapView>
             <FlatList
               // data={orderedLoc}

@@ -13,6 +13,10 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 // import axios from "axios";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
+
+import MapViewDirections from "react-native-maps-directions";
+const GOOGLE_MAPS_APIKEY = "AIzaSyAFqLtnYV2b0RnO1Gl-0yVvLnqrIdaQgUI";
+
 const windowWidth = Dimensions.get("window").width;
 
 export default function ItinerarySelection({ route, navigation }) {
@@ -87,53 +91,42 @@ export default function ItinerarySelection({ route, navigation }) {
           }}
         >
           {locations.concat(origin).map((loc) => {
-                      /* Below maps out each location from the database to a marker */
-                      /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
-                            return (
-                                <Marker
-                                    key={loc._id}
-                                    title={loc.NAME}
-                                    coordinate=
-                                    {{
-                                    latitude: loc.latitude,
-                                    longitude: loc.longitude
-                                    }}
-                                >
-                                  <Callout 
-                                        /* Double click navigates to new journal page */
-                                        style={{alignItems:"center"}}>
-                                        
-                                        <View>
-                                          
-                                            
-                                            <Text style={{fontSize:8}}>{loc.NAME}</Text>
-                                        
-                                            
-                                        </View>
-
-                                    </Callout>
-                                  
-                        
-                                </Marker>
-                                
-                            )
-                        })}
-          {/* <FlatList
-            data={locations}
-            renderItem={({ item }) => (
-              <MapView.Marker
+            /* Below maps out each location from the database to a marker */
+            /* In the callout onPress, fetchLocationPublicJournals should be implemented.*/
+            return (
+              <Marker
+                key={loc._id}
+                title={loc.NAME}
                 coordinate={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
+                  latitude: loc.latitude,
+                  longitude: loc.longitude,
                 }}
-                title={item.NAME}
-                // description={item.description}
-              />
-            )}
-            keyExtractor={(item) => {
-              item.latitude + item.longitude + item._id;
+              >
+                <Callout
+                  /* Double click navigates to new journal page */
+                  style={{ alignItems: "center" }}
+                >
+                  <View>
+                    <Text style={{ fontSize: 8 }}>{loc.NAME}</Text>
+                  </View>
+                </Callout>
+              </Marker>
+            );
+          })}
+          <MapViewDirections
+            // key={loc._id}
+            origin={{
+              latitude: origin.latitude,
+              longitude: origin.longitude,
             }}
-          /> */}
+            destination={{
+              latitude: 37.3318456,
+              longitude: -122.0296002,
+            }}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={3}
+            strokeColor="hotpink"
+          />
         </MapView>
         <FlatList
           // data={orderedLoc}
