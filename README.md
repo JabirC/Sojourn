@@ -59,7 +59,9 @@ Then, navigate to the folder in command line, run *npm run start* and enter the 
 
 ├── react-native-geolocation-service@5.3.1
 
-├── react-native-maps@0.31.1
+├── react-native-maps@1.3.2
+
+├── react-native-maps-directions@1.9.0
 
 ├── react-native-modal-dropdown@1.0.2
 
