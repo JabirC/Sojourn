@@ -15,6 +15,8 @@ Then, navigate to the folder in command line, run *npm run start* and enter the 
 
 *npx expo start* can also be used.
 
+Itinerary-Screen contains the closest we got to finishing itinerary, but its stability was too questionable to merge.
+
 
 
 ## Dependencies
