@@ -120,10 +120,19 @@ export default function ItinerarySelection({ route, navigation }) {
               longitude: origin.longitude,
             }}
             destination={{
-              latitude: 37.3318456,
-              longitude: -122.0296002,
+              latitude: locations[destinationNum-1].latitude,
+              longitude: locations[destinationNum-1].longitude,
             }}
+
+            waypoints={locations.map((loc) => {
+              return {
+
+                location: { latitude:loc.latitude, longitude: loc.longitude },
+                stopover: true,
+              };
+            })}
             apikey={GOOGLE_MAPS_APIKEY}
+            optimizeWaypoints={true}
             strokeWidth={3}
             strokeColor="hotpink"
           />

@@ -257,20 +257,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
                   </Marker>
                 );
               })}
-              <MapViewDirections
-                // key={loc._id}
-                origin={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                destination={{
-                  latitude: 37.3318456,
-                  longitude: -122.0296002,
-                }}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={3}
-                strokeColor="hotpink"
-              />
+             
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -327,20 +314,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
                     </Marker>
                   );
                 })}
-              <MapViewDirections
-                // key={loc._id}
-                origin={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                destination={{
-                  latitude: itinTwo[destinationNum].latitude,
-                  longitude: itinTwo[destinationNum].longitude,
-                }}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={3}
-                strokeColor="hotpink"
-              />
+              
             </MapView>
             <FlatList
               // data={orderedLoc}
@@ -398,20 +372,7 @@ export default function ItineraryGenScreen({ route, navigation }) {
                     </Marker>
                   );
                 })}
-              <MapViewDirections
-                // key={loc._id}
-                origin={{
-                  latitude: origin.latitude,
-                  longitude: origin.longitude,
-                }}
-                destination={{
-                  latitude: 37.3318456,
-                  longitude: -122.0296002,
-                }}
-                apikey={GOOGLE_MAPS_APIKEY}
-                strokeWidth={3}
-                strokeColor="hotpink"
-              />
+             
             </MapView>
             <FlatList
               // data={orderedLoc}

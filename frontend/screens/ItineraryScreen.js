@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ModalDropdown from "react-native-modal-dropdown";
-import Animated, {
-  FadeInDown,
-  Layout,
-  LightSpeedInLeft,
-  Transition,
-} from "react-native-reanimated";
+
 import {
   Platform,
   StatusBar,
