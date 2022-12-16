@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign:"center",
         marginTop:"2%",
-        marginBottom:"6%"
+        marginBottom:"6%",
+        width:"75%"
     },
     resetPass:{
         marginTop: "5%",
